@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="device-width, initial-scale=1.0">
+		<title>CMS</title>
+		<script src="https://unpkg.com/tinymce@5.4.1/tinymce.js"></script>
+	</head>
+	<body>
+		<script src="/admin/dist/widgets.js"></script> 
+		<script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+
+		<script>
+			CMS.registerWidget('slugunique', CMSWIDGETS.SlugUnique, CMSWIDGETS.SlugUniquePrev);
+
+			CMS.registerWidget('html', CMSWIDGETS.HTMLEditor,CMSWIDGETS.HTMLPreview);
+		</script>
+	</body>
+</html>

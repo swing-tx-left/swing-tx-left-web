@@ -1,0 +1,29 @@
+backend:
+  name: git-gateway
+media_folder: public/files
+public_folder: /files
+collections: 
+  - label: pages
+    name: pages
+    format: yml
+    extension: yml
+    folder: pagecontent
+    create: true
+    fields:
+      - name: title
+        widget: string
+      - name: slug
+        widget: slugunique
+      - name: content
+        widget: list
+        collapsed: false
+        types:
+          - name: normalcontent
+            widget: object
+            fields:
+              - name: header
+                widget: string
+              - name: content
+                widget: html
+
+local_backend: true

@@ -1,0 +1,39 @@
+{
+  "name": "swtxl-website-nextjs",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "next",
+    "build": "next build",
+    "export": "next build && next export",
+    "start": "next start",
+    "cms": "npx netlify-cms-proxy-server",
+    "adminpack": "webpack --watch --config adminpack/webpack.js --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/something-something-something/swtxl-website-nextjs.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://gitlab.com/something-something-something/swtxl-website-nextjs/issues"
+  },
+  "homepage": "https://gitlab.com/something-something-something/swtxl-website-nextjs#readme",
+  "dependencies": {
+    "@tinymce/tinymce-react": "^3.6.0",
+    "next": "^9.4.5-canary.43",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-react": "^7.10.4",
+    "babel-loader": "^8.1.0",
+    "webpack": "^4.44.0",
+    "webpack-cli": "^3.3.12"
+  }
+}
