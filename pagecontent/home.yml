@@ -1,0 +1,6 @@
+title: Home
+slug: home
+content:
+  - type: normal-section
+    header: Home
+    content: <p>This is the home page</p>

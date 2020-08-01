@@ -1,12 +1,44 @@
 title: test
 slug: test
 content:
-  - type: normalcontent
-    content: <p>test content</p>
-    header: Hello
-  - type: normalcontent
+  - type: normal-section
+    content: |-
+      <p>test content</p>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+    header: "Hello       "
+    id: ""
+  - type: sections-with-toc
+    sections:
+      - type: normal-section
+        header: Hello
+        content: <p>This is a section</p>
+        id: sec1
+      - type: normal-section
+        header: Part 2
+        content: <p>This is part 2</p>
+        id: sec2
+  - type: normal-section
     content: |-
       <p>Section 2</p>
       <p>&nbsp;</p>
       <p><strong>test&nbsp;</strong></p>
     header: hi
+mainButtons:
+  - alignment: left
+    buttons:
+      - type: popup
+        text: MailChimp
+        content: <p>some mailchimp form</p>
+      - type: link
+        newTab: false
+        text: This is a link
+        link: /some/page
+  - alignment: center
+    buttons:
+      - type: link
+        newTab: true
+        text: test
+        link: test

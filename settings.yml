@@ -1,0 +1,8 @@
+name: Swing TX Left
+logo: /files/swing_tx_left_720final-e1564565077506.png
+home: home
+navigationBar:
+  - page: home
+    text: Home
+  - page: test
+    text: Test Page

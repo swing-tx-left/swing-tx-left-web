@@ -8,22 +8,121 @@ collections:
     format: yml
     extension: yml
     folder: pagecontent
+    editor:
+      preview: false
     create: true
     fields:
       - name: title
         widget: string
       - name: slug
         widget: slugunique
+      - name: mainImage
+        widget: image 
+        required: false
+      - name: mainImageFullPage
+        widget: boolean
+        default: false
       - name: content
         widget: list
         collapsed: false
         types:
-          - name: normalcontent
+          - name: normal-section
             widget: object
             fields:
               - name: header
                 widget: string
+              - name: id
+                widget: string
+                pattern: ['^[\w]+$','a-z A-Z 0-9 _' ]
+                required: false
               - name: content
                 widget: html
-
+          - name: sections-with-toc
+            fields:
+              - name: sections
+                widget: list
+                collapsed: false
+                types:
+                    - name: normal-section
+                      widget: object
+                      fields:
+                        - name: header
+                          widget: string
+                        - name: id
+                          widget: string
+                          pattern: ['^[\w]+$','a-z A-Z 0-9 _' ]
+                          required: true
+                        - name: content
+                          widget: html
+      - name: mainButtons
+        widget: list
+        fields:
+          - name: alignment
+            widget: select
+            default: left
+            options:
+              - left
+              - center
+              - right
+          - name: buttons
+            widget: list
+            types:
+              - name: popup
+                widget: object
+                fields: 
+                  - name: text
+                    widget: string
+                  - name: content
+                    widget: html
+              - name: link
+                widget: object
+                fields: 
+                  - name: text
+                    widget: string
+                  - name: link
+                    widget: string
+                  - name: newTab
+                    widget: boolean
+                    default: false
+  - label: Settings
+    name: settings
+    editor:
+      preview: false
+    files:
+      - name: siteSettings
+        label: Web Site Settings
+        file: settings.yml
+        format: yml
+        extension: yml
+        editor:
+          preview: false
+        fields:
+        - name: name
+          widget: string
+        - name: logo
+          widget: image
+        - name: home
+          widget: relation
+          collection: pages
+          valueField: slug
+          searchFields: 
+            - title
+            - slug
+          displayFields:
+            - "URL: /{{slug}} Title: {{title}}"
+        - name: navigationBar
+          widget: list
+          collapsed: false
+          fields:
+            - name: page
+              widget: relation
+              collection: pages
+              valueField: slug
+              searchFields: 
+                - title
+                - slug
+              displayFields:
+                - "URL: /{{slug}} Title: {{title}}"
+            - name: text
+              widget: string
 local_backend: true

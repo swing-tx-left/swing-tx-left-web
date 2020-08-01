@@ -1,0 +1,7 @@
+
+ .sec{
+	background-color:var(--light-pink);
+}
+ .sec:nth-child(2n){
+	background-color:var(--light-blue);
+}
