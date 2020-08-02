@@ -23,7 +23,12 @@ export default function Page(props) {
 
 			<pre>{JSON.stringify(props.pageData, null, '\t')}</pre>
 			<CSSGlobalVars/>
-
+			<style global jsx>{`
+				body{
+					all:unset;
+				}
+			`}
+			</style>
 		</>
 	);
 }

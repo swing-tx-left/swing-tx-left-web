@@ -2,7 +2,7 @@ import styles from './ContentBlock.module.css'
 import rehypeReact from 'rehype-react';
 import unified from 'unified';
 import rehypeParse from 'rehype-parse';
-
+import {htmlToReact} from '../lib/util'
 
 export default function ContentBlocks(props) {
 	
@@ -13,17 +13,17 @@ export default function ContentBlocks(props) {
 	return <>{mkBlocks(props.content)}</>;
 }
 
-function htmlToReact(html){
-	return unified()
-	.use(rehypeParse,{fragment:true})
-	.use(rehypeReact,{
-		createElement:React.createElement,
-		fragment:React.Fragment
-	})
-	.processSync(html)
-	.result;
+// function htmlToReact(html){
+// 	return unified()
+// 	.use(rehypeParse,{fragment:true})
+// 	.use(rehypeReact,{
+// 		createElement:React.createElement,
+// 		fragment:React.Fragment
+// 	})
+// 	.processSync(html)
+// 	.result;
 
-}
+// }
 
 
 function mkBlocks(content){

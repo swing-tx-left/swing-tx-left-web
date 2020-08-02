@@ -1,5 +1,7 @@
 title: Home
 slug: home
+mainImage: /files/swing_tx_left_720final-e1564565077506.png
+mainImageFullPage: false
 content:
   - type: normal-section
     header: Home

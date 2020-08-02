@@ -1,0 +1,36 @@
+.popupBackDrop{
+	position:fixed;
+	top:0;
+	left:0;
+	width:100vw;
+	height:100vh;
+	background-color: rgba(0,0,0,0.5);
+}
+
+.popup{
+	position:fixed;
+	top:25vh;
+	left:25vw;
+	width:50vw;
+	height:50vh;
+	background-color: lawngreen;
+	transition:top 0.3s,left 0.3s, width 0.3s,height 0.3s;
+}
+.popupMax{
+	top:0;
+	left:0;
+	width:100vw;
+	height:90vh;
+}
+
+.titleBar{
+	background-color: black;
+}
+.close{
+	background-color: red;
+	color:white;
+}
+.max{
+	background-color: blue;
+	color:white;
+}
