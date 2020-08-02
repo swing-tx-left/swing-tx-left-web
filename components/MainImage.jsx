@@ -2,7 +2,7 @@ import styles from './MainImage.module.css'
 import { useState } from 'react';
 import PopUpOverlay from './PopUpOverlay';
 import { loadGetInitialProps } from 'next/dist/next-server/lib/utils';
-
+import { htmlToReact } from '../lib/util';
 
 export default function MainImage(props) {
 	let style = {};
@@ -51,7 +51,10 @@ function MainButtonPopup(props) {
 	const [popup,setPopUp]=useState(false);
 
 	return (<><button onClick={()=>{setPopUp(!popup)}}>{props.text}</button>
-	{popup &&
-		<PopUpOverlay closeFunction={()=>{setPopUp(false)}} message={props.content}/>}
+	 
+		
+				<PopUpOverlay display={popup} closeFunction={()=>{setPopUp(false)}}>{htmlToReact(props.content)}</PopUpOverlay>
+		
+	
 		</>);
 }

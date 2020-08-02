@@ -28,6 +28,7 @@
     "next": "^9.5.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-transition-group": "^4.4.1",
     "rehype-parse": "^7.0.1",
     "rehype-react": "^6.1.0",
     "unified": "^9.1.0"

@@ -7,6 +7,27 @@
 	background-color: rgba(0,0,0,0.5);
 }
 
+.popupBackDropEnter{
+
+	opacity:0;
+}
+
+.popupBackDropEnterActive{
+	opacity:1;
+
+	transition:opacity 0.5s;
+}
+.popupBackDropExit{
+	
+	opacity:1;
+	
+}
+
+.popupBackDropExitActive{
+	opacity:0;
+	transition:opacity 0.5s;
+}
+
 .popup{
 	position:fixed;
 	top:25vh;
@@ -15,6 +36,7 @@
 	height:50vh;
 	background-color: lawngreen;
 	transition:top 0.3s,left 0.3s, width 0.3s,height 0.3s;
+	transform-origin: 50% 50%;
 }
 .popupMax{
 	top:0;
@@ -22,6 +44,33 @@
 	width:100vw;
 	height:90vh;
 }
+
+
+
+.popupEnter{
+	filter:blur(1vmax);
+	transform:translateX(-100vmax) scale(0.0001) ;
+}
+
+.popupEnterActive{
+	transform: translateX(0)  scale(1);
+	filter:blur(0vmin);
+	transition:transform 500ms linear,filter 500ms linear ;
+}
+.popupExit{
+	
+	transform:translateX(0)  scale(1);
+	
+}
+
+.popupExitActive{
+	transform:translateY(100vmax)  scale(0);
+	
+	transition:transform 500ms;
+}
+
+
+
 
 .titleBar{
 	background-color: black;
