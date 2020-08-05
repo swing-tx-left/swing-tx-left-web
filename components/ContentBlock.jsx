@@ -3,6 +3,8 @@ import rehypeReact from 'rehype-react';
 import unified from 'unified';
 import rehypeParse from 'rehype-parse';
 import {htmlToReact} from '../lib/util'
+import {Events} from './events/Events';
+
 
 export default function ContentBlocks(props) {
 	
@@ -10,7 +12,7 @@ export default function ContentBlocks(props) {
 
 
 	
-	return <>{mkBlocks(props.content)}</>;
+	return <>  {mkBlocks(props.content,props.eventData)}</>;
 }
 
 // function htmlToReact(html){
@@ -26,7 +28,7 @@ export default function ContentBlocks(props) {
 // }
 
 
-function mkBlocks(content){
+function mkBlocks(content,eventData){
 	let contentBlockArr = [];
 	//note keys arnt ideal
 	for (let sec of content) {
@@ -36,6 +38,16 @@ function mkBlocks(content){
 
 					<h1>{sec.header}</h1>
 					{htmlToReact(sec.content)}
+				</div>)
+		}
+		else if (sec.type === 'events') {
+			contentBlockArr.push(
+				<div  className={styles.sec} key={JSON.stringify(sec)} id={(sec.id !== undefined && sec.id !== '') ? sec.id : null}>
+
+					<h1>{sec.header}</h1>
+					
+
+					<Events eventData={eventData}/>
 				</div>)
 		}
 		else if (sec.type === 'sections-with-toc') {

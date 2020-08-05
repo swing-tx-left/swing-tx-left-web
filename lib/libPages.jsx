@@ -2,12 +2,13 @@ import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
 import {getSiteSettings} from './libSiteSettings'
+import {getSwingLeftEvents} from './util'
 
 export function getPages(){
 	let pageFiles=fs.readdirSync(path.join(process.cwd(),'pagecontent'));
 	let dataForAllPages =pageFiles.map((file) => {
 		let pageData = yaml.safeLoad( fs.readFileSync(path.join(process.cwd(), 'pagecontent', file), 'utf-8'));
-		console.log(pageData)
+		//console.log(pageData)
 		if (pageData.title===undefined) {
 			pageData.title = 'No Title'
 		}
@@ -18,13 +19,15 @@ export function getPages(){
 		pageData.url='/'+pageData.slug;
 		return pageData;
 	});
-	console.log(dataForAllPages);
+	//console.log(dataForAllPages);
 	return dataForAllPages;
 }
-
-export function getProps(context){
-	let pageData=getPages()
-	let siteData=getSiteSettings()
+//const eventdata= getData('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now');
+export async function getProps(context){
+	let pageData=getPages();
+	let siteData=getSiteSettings();
+	let swtxlevents= await getSwingLeftEvents('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now')
+	//let swtxlevents=await eventdata;
 	return {
 		props:{
 			siteData:siteData,
@@ -36,7 +39,8 @@ export function getProps(context){
 						return el.slug===context.params.pageid.join('/');
 					}
 				 
-				})
+				}),
+			eventData:swtxlevents
 		}
 		
 	}

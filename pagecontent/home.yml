@@ -6,3 +6,6 @@ content:
   - type: normal-section
     header: Home
     content: <p>This is the home page</p>
+  - type: events
+    header: Events
+    id: evants

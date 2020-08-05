@@ -10,18 +10,17 @@ export default function Page(props) {
 		<>
 			<Header logo={props.siteData.logo} homepage={'/' + props.siteData.home} nav={props.siteData.navigationBar} />
 			<MainImage image={props.pageData.mainImage} buttons={props.pageData.mainButtons}/>
-		
 			<main>
-				<ContentBlocks content={props.pageData.content}/>
+				<ContentBlocks eventData={props.eventData} content={props.pageData.content}/>
 			</main>
-			
+		
 				
 			
 			
 
 
 
-			<pre>{JSON.stringify(props.pageData, null, '\t')}</pre>
+			<pre>{JSON.stringify(props, null, '\t')}</pre>
 			<CSSGlobalVars/>
 			<style global jsx>{`
 				body{
@@ -39,6 +38,6 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
-	return getProps(context)
+	return await getProps(context)
 }
 

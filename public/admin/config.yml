@@ -37,6 +37,14 @@ collections:
                 required: false
               - name: content
                 widget: html
+          - name: events
+            fields:
+              - name: header
+                widget: string
+              - name: id
+                widget: string
+                pattern: ['^[\w]+$','a-z A-Z 0-9 _' ]
+                required: false
           - name: sections-with-toc
             fields:
               - name: sections
