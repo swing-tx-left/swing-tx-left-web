@@ -57,7 +57,31 @@ export function splitEventsIntoTimeSlot(events){
 		return fel.timeslot.start_date-sel.timeslot.start_date;
 	});
 }
-
+export function splitTimeslotsIntoDays(eventTimeSlots){
+	return eventTimeSlots.reduce((groupedArr,curVal)=>{
+		let date=new Date(curVal.timeslot.start_date*1000)
+		let etsStart=date.toDateString();
+		let dateExistAlready=groupedArr.some((el)=>{
+			return el.dayStr===etsStart;
+		});
+		if(dateExistAlready){
+			let dateLocation=groupedArr.findIndex((el)=>{
+				return el.dayStr===etsStart
+			});
+			groupedArr[dateLocation].etsArr.push(curVal);
+		}
+		else{
+			groupedArr.push({
+				dayStr:etsStart,
+				month:date.getMonth(),
+				day:date.getDate(),
+				year:date.getFullYear(),
+				etsArr:[curVal]
+			});
+		}
+		return groupedArr;
+	},[]);
+}
 function filterOnlySwingTXLeft(event,index,arr){
 	let swingtxleftRegExp=/swing\s*tx\s*left/i;
 	let stxlRegExp=/STXL/i;
@@ -68,4 +92,32 @@ function filterOnlySwingTXLeft(event,index,arr){
 		return true;
 	}
 	return false;
+}
+
+export function humanizeEventType(eventType,options={}){
+	if(!options.hasOwnProperty('forForm')){
+		options.forForm=false;
+	}
+
+	if(eventType==='MEET_GREET'){
+		return 'Meet & Greet'
+	}
+	if(eventType==='VOTER_REG'){
+		return 'Voter Registration'
+	}
+	if(options.forForm&&eventType==='OTHER'){
+		return 'Other (includes literature drops)'
+	}
+
+	let words=eventType.split('_');
+
+	words=words.map((w)=>{
+		w=w.toLowerCase();
+		w=w[0].toUpperCase()+w.substring(1);
+		return w;
+	});
+
+	return words.join(' ');
+
+
 }
