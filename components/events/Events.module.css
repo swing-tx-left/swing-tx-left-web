@@ -1,0 +1,30 @@
+.eventQuickCalander td .dayPreview{
+	position: absolute;
+	
+	/* top:0%; */
+	
+	transform:translateY(calc( -100% - 0.5rem )) ;
+	transform-origin: 100% 100%;
+	pointer-events: none;
+	visibility: hidden;
+	padding: 2rem;
+	background-color:rgb(92, 180, 252);
+	opacity: 0;
+	transition: display 0s, opacity 0.5s;
+
+}
+.eventQuickCalander td:hover .dayPreview{
+	opacity: 1;
+	
+	visibility: visible;
+}
+
+.dayPreviewDay{
+	text-align: center;
+	
+	font-weight: bold;
+	border-bottom: red 0.01rem solid;
+	padding: 0.5rem;
+	margin:0 0 0.5rem 0;
+	color: rgb(33, 4, 87);
+}

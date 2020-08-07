@@ -3,9 +3,11 @@ import PopUpOverlay from '../PopUpOverlay';
 
 import {getSwingLeftEvents,splitEventsIntoTimeSlot,humanizeEventType,splitTimeslotsIntoDays} from '../../lib/util';
 import { useState } from 'react';
+
+import styles from './Events.module.css'
 //function event
 
-
+import {ContentBlock} from '../ContentBlock'
 
 
 
@@ -18,10 +20,12 @@ export function Events(props){
 	let obj=useSWR('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now', getSwingLeftEvents,{initialData:props.eventData});
 	
 		
-
+		//fix id mess
 		return (<>
-		<EventsCtrl eventData={obj.data}/>
-		
+		<ContentBlock id={(props.secid !== undefined && props.secid  !== '') ? props.secid  : null}>
+
+			<EventsCtrl eventData={obj.data}/>
+		</ContentBlock>
 		<EventList eventData={obj.data}/>
 		<EventsCalander eventData={obj.data}/>
 	</>);
@@ -65,10 +69,14 @@ function EventsCalander(props){
 	return (<>
 		<div style={{position:'sticky',bottom:0,backgroundColor:'lightgreen'}}>
 			{
-				displayCal ? <button onClick={()=>{setDisplayCal(false)}}>Hide Calander</button>:<button onClick={()=>{setDisplayCal(true)}}>Show Calander</button>
+				displayCal ? <button onClick={()=>{setDisplayCal(false)}}>Hide Calander</button>:<button onClick={()=>{setDisplayCal(true)}}>Jump to Day...</button>
 			}
 			{displayCal&&(<>
-				<button onClick={()=>{
+				
+			<EventsMonth days={days.filter((day)=>{
+				return day.month===month&&day.year===year;
+			})} month={month} year={year}/>
+			<button onClick={()=>{
 				if(month===0){
 					setYear(year-1);
 					setMonth(11);
@@ -86,10 +94,6 @@ function EventsCalander(props){
 					setMonth(month+1);
 				}
 			}}>Month+</button>
-			<EventsMonth days={days.filter((day)=>{
-				return day.month===month&&day.year===year;
-			})} month={month} year={year}/>
-	
 			</>)}
 			
 		</div>
@@ -138,7 +142,7 @@ function EventsMonth(props){
 	return (<>
 		<div>{props.month+1}/{props.year}</div>
 		{/* <pre>{JSON.stringify(weeks,null,'\t')}</pre> */}
-		<table>
+		<table className={styles.eventQuickCalander}>
 			<thead>
 				<tr>
 					<td>Sun</td>
@@ -162,10 +166,18 @@ function EventsMonth(props){
 								let hoverText=props.days.find((el)=>{
 									return day.date.getDate()===el.day
 								}).etsArr.map((el)=>{
-									return el.event.title;
-								}).join('\n');
+									return <div>{el.event.title}</div>;
+								});
 
-								return <td title={hoverText} key={index}><a href={'#eventday-'+day.date.getMonth()+'-'+day.date.getDate()+'-'+day.date.getFullYear()}>{day.date.getDate()}</a></td>
+								return <td key={index}>
+									<div className={styles.dayPreview}>
+										<div className={styles.dayPreviewDay}> {day.date.getDate()}</div>
+								{hoverText}
+								</div>
+									<a href={'#eventday-'+day.date.getMonth()+'-'+day.date.getDate()+'-'+day.date.getFullYear()}>{day.date.getDate()}</a>
+								
+								
+								</td>
 							}
 							else{
 								return <td key={index}>{day.date.getDate()}</td>
@@ -190,7 +202,9 @@ export function EventDay(props){
 	let timeslots=props.day.etsArr.map((el)=>{
 		return <EventTimeSlot key={el.timeslot.id} eventTimeSlot={el}/> 
 	})
-	return <div id={'eventday-'+props.day.month+'-'+props.day.day+'-'+props.day.year}><h2>{props.day.dayStr}</h2>{timeslots}</div>
+	return (<ContentBlock id={'eventday-'+props.day.month+'-'+props.day.day+'-'+props.day.year}>
+		<h2>{props.day.dayStr}</h2>{timeslots}
+		</ContentBlock>)
 }
 
 export function EventTimeSlot(props){
@@ -226,7 +240,9 @@ export function EventTimeSlot(props){
 
 			<EventDescription content={event.description}/>
 			<button onClick={()=>{setSignup(!signup)}}>Submit</button>
-			<PopUpOverlay closeFunction={()=>{setSignup(false)}} display={signup}> <iframe src={event.browser_url}/></PopUpOverlay>
+			<PopUpOverlay closeFunction={()=>{setSignup(false)}} display={signup}>
+				 <iframe style={{width:'100%',height:'100%',border:0}} src={event.browser_url}/>
+			</PopUpOverlay>
 
 			<details><summary>Debug</summary><pre>{JSON.stringify(props.eventTimeSlot,null,'\t')}</pre></details>
 	</>);

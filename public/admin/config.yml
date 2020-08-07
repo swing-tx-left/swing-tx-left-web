@@ -25,6 +25,7 @@ collections:
       - name: content
         widget: list
         collapsed: false
+        default: []
         types:
           - name: normal-section
             widget: object
@@ -64,10 +65,10 @@ collections:
                           widget: html
       - name: mainButtons
         widget: list
+        default: []
         fields:
           - name: alignment
             widget: select
-            default: left
             options:
               - left
               - center
@@ -92,6 +93,13 @@ collections:
                   - name: newTab
                     widget: boolean
                     default: false
+      - name: pageMainMessage
+        widget: html
+        required: false
+      - name: pageMainMessageShow
+        widget: boolean
+        default: false
+        required: false
   - label: Settings
     name: settings
     editor:

@@ -1,7 +1,6 @@
 import styles from './MainImage.module.css'
 import { useState } from 'react';
 import PopUpOverlay from './PopUpOverlay';
-import { loadGetInitialProps } from 'next/dist/next-server/lib/utils';
 import { htmlToReact } from '../lib/util';
 
 export default function MainImage(props) {
@@ -10,7 +9,19 @@ export default function MainImage(props) {
 		style.backgroundImage = 'url(' + props.image + ')';
 	}
 
+	if(!props.fullPageImage&&props.image !== undefined){
+		style.minHeight='40vh'
+	}
+	else if(!props.fullPageImage){
+		style.minHeight='20vh'
+	}
+
 	return (<div className={styles.mainImage} style={style}>
+		{(props.pageMainMessage !== undefined && props.pageMainMessageShow ) &&
+			<PageMessage content={props.pageMainMessage} />
+
+		}
+		
 		{(props.buttons !== undefined && props.buttons.length > 0) &&
 			<MainButtonArea buttons={props.buttons} />
 
@@ -18,6 +29,10 @@ export default function MainImage(props) {
 	</div>);
 
 }
+function PageMessage(props){
+return (<div className={styles.pageMessage}>{htmlToReact(props.content)}</div>)
+}
+
 
 function MainButtonArea(props) {
 
@@ -40,17 +55,17 @@ function MainButtonRow(props) {
 		}
 	});
 
-	return (<div style={{ textAlign: props.row.alignment }}>{buttons}</div>);
+	return (<div className={styles.buttonRow} style={{ textAlign: props.row.alignment }}>{buttons}</div>);
 }
 
 function MainButtonLink(props) {
-	return (<a href={props.link} target={props.newTab ? '_blank' : null}>{props.text}</a>);
+	return (<a href={props.link} className={styles.mainImagebutton} target={props.newTab ? '_blank' : null}>{props.text}</a>);
 }
 function MainButtonPopup(props) {
 	
 	const [popup,setPopUp]=useState(false);
 
-	return (<><button onClick={()=>{setPopUp(!popup)}}>{props.text}</button>
+	return (<><button className={styles.mainImagebutton} onClick={()=>{setPopUp(!popup)}}>{props.text}</button>
 	 
 		
 				<PopUpOverlay display={popup} closeFunction={()=>{setPopUp(false)}}>{htmlToReact(props.content)}</PopUpOverlay>

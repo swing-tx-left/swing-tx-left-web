@@ -1,6 +1,12 @@
 
  .sec{
+	border-style: solid;
+	border-color: var(--site-black);
+	border-color:var(--logo-mean);
+	 border-width:0.05rem 0 0 0 ;
+	 padding: 3rem 0 1rem 0;
 	background-color:var(--light-pink);
+	padding:3rem max( calc( 50vw - 40rem ) , 2rem );
 }
  .sec:nth-child(2n){
 	background-color:var(--light-blue);

@@ -6,3 +6,5 @@ navigationBar:
     text: Home
   - page: test
     text: Test Page
+  - page: voting-and-election-resources
+    text: Voting and election Resourses

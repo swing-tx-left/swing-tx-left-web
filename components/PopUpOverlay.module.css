@@ -44,7 +44,9 @@
 	width:100vw;
 	height:90vh;
 }
-
+.popupContent{
+	height:100%;
+}
 
 
 .popupEnter{

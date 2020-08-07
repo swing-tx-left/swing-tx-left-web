@@ -1,5 +1,6 @@
 title: test
 slug: test
+mainImageFullPage: false
 content:
   - type: normal-section
     content: |-

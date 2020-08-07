@@ -29,7 +29,7 @@ export default function PopUpOverlay(props) {
 					<button onClick={props.closeFunction} className={styles.close}>X</button>
 					<button onClick={()=>{setMaximize(!maximize)}} className={styles.max}>{maximize?'>-<':'<->'}</button>
 				</div>
-				<div>{props.children}</div>
+				<div className={styles.popupContent}>{props.children}</div>
 			</div>
 		</CSSTransition>
 

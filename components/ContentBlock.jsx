@@ -6,7 +6,7 @@ import {htmlToReact} from '../lib/util'
 import {Events} from './events/Events';
 
 
-export default function ContentBlocks(props) {
+export function ContentBlocks(props) {
 	
 
 
@@ -27,6 +27,12 @@ export default function ContentBlocks(props) {
 
 // }
 
+export function ContentBlock(props){
+	return (<div className={styles.sec} id={props.id}>
+		{props.children}
+
+	</div>)
+}
 
 function mkBlocks(content,eventData){
 	let contentBlockArr = [];
@@ -34,21 +40,17 @@ function mkBlocks(content,eventData){
 	for (let sec of content) {
 		if (sec.type === 'normal-section') {
 			contentBlockArr.push(
-				<div  className={styles.sec} key={JSON.stringify(sec)} id={(sec.id !== undefined && sec.id !== '') ? sec.id : null}>
-
+				<ContentBlock  key={JSON.stringify(sec)} id={(sec.id !== undefined && sec.id !== '') ? sec.id : null}>
 					<h1>{sec.header}</h1>
 					{htmlToReact(sec.content)}
-				</div>)
+				</ContentBlock>)
 		}
 		else if (sec.type === 'events') {
 			contentBlockArr.push(
-				<div  className={styles.sec} key={JSON.stringify(sec)} id={(sec.id !== undefined && sec.id !== '') ? sec.id : null}>
-
-					<h1>{sec.header}</h1>
-					
-
-					<Events eventData={eventData}/>
-				</div>)
+			
+					//fixthis
+					<Events key={JSON.stringify(sec)} secid={(sec.id !== undefined && sec.id !== '') ? sec.id : null} eventData={eventData}/>
+				)
 		}
 		else if (sec.type === 'sections-with-toc') {
 			let toc = sec.sections.map((el) => {
@@ -57,12 +59,12 @@ function mkBlocks(content,eventData){
 
 			contentBlockArr.push(
 
-				<div key={JSON.stringify(sec)} className={styles.sec} >
+				<ContentBlock key={JSON.stringify(sec)}>
 					<ul>
 						{toc}
 					</ul>
 
-				</div>);
+				</ContentBlock>);
 
 			contentBlockArr = contentBlockArr.concat(mkBlocks(sec.sections))
 		}
