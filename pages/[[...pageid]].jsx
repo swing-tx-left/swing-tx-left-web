@@ -25,7 +25,7 @@ export default function Page(props) {
 
 
 
-			<details><pre>{JSON.stringify(props, null, '\t')}</pre></details>
+			{/* <details><pre>{JSON.stringify(props, null, '\t')}</pre></details> */}
 			<CSSGlobalVars/>
 			<style global jsx>{`
 				html{

@@ -243,8 +243,6 @@ export function EventTimeSlot(props){
 			<PopUpOverlay closeFunction={()=>{setSignup(false)}} display={signup}>
 				 <iframe style={{width:'100%',height:'100%',border:0}} src={event.browser_url}/>
 			</PopUpOverlay>
-
-			<details><summary>Debug</summary><pre>{JSON.stringify(props.eventTimeSlot,null,'\t')}</pre></details>
 	</>);
 }
 
