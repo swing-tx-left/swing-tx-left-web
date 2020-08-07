@@ -22,7 +22,7 @@ export function Events(props){
 		
 		//fix id mess
 		return (<>
-		<ContentBlock id={(props.secid !== undefined && props.secid  !== '') ? props.secid  : null}>
+		<ContentBlock blockid={(props.secid !== undefined && props.secid  !== '') ? props.secid  : null}>
 
 			<EventsCtrl eventData={obj.data}/>
 		</ContentBlock>
@@ -202,7 +202,7 @@ export function EventDay(props){
 	let timeslots=props.day.etsArr.map((el)=>{
 		return <EventTimeSlot key={el.timeslot.id} eventTimeSlot={el}/> 
 	})
-	return (<ContentBlock id={'eventday-'+props.day.month+'-'+props.day.day+'-'+props.day.year}>
+	return (<ContentBlock blockid={'eventday-'+props.day.month+'-'+props.day.day+'-'+props.day.year}>
 		<h2>{props.day.dayStr}</h2>{timeslots}
 		</ContentBlock>)
 }

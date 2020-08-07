@@ -28,7 +28,7 @@ export function ContentBlocks(props) {
 // }
 
 export function ContentBlock(props){
-	return (<div className={styles.sec} id={props.id}>
+	return (<div className={styles.sec} id={props.blockid}>
 		{props.children}
 
 	</div>)
@@ -40,7 +40,7 @@ function mkBlocks(content,eventData){
 	for (let sec of content) {
 		if (sec.type === 'normal-section') {
 			contentBlockArr.push(
-				<ContentBlock  key={JSON.stringify(sec)} id={(sec.id !== undefined && sec.id !== '') ? sec.id : null}>
+				<ContentBlock  key={JSON.stringify(sec)} blockid={(sec.id !== undefined && sec.id !== '') ? sec.id : null}>
 					<h1>{sec.header}</h1>
 					{htmlToReact(sec.content)}
 				</ContentBlock>)
