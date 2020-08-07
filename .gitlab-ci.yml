@@ -1,0 +1,13 @@
+image: node:14
+pages: 
+  script:
+    - npm install
+    - npm run export
+    - rm -rf public
+    - mkdir -p public
+    - cp -r out/* public
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
