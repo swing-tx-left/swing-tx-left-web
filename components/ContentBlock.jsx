@@ -1,9 +1,12 @@
 import styles from './ContentBlock.module.css'
-import rehypeReact from 'rehype-react';
-import unified from 'unified';
-import rehypeParse from 'rehype-parse';
 import {htmlToReact} from '../lib/util'
-import {Events} from './events/Events';
+// import {Events} from './events/Events';
+import dynamic from 'next/dynamic';
+
+
+const DynamicEvents=dynamic(()=>{
+	return import('./events/Events').then((obj)=>{ return obj.Events})
+},{ssr:false});
 
 
 export function ContentBlocks(props) {
@@ -37,10 +40,11 @@ export function ContentBlock(props){
 function MkBlocks({content,eventData}){
 	let contentBlockArr = [];
 	//note keys arnt ideal
+	let index=0;
 	for (let sec of content) {
 		if (sec.type === 'normal-section') {
 			contentBlockArr.push(
-				<ContentBlock  key={JSON.stringify(sec)} blockid={(sec.id !== undefined && sec.id !== '') ? sec.id : null}>
+				<ContentBlock  key={index} blockid={(sec.id !== undefined && sec.id !== '') ? sec.id : null}>
 					<h1>{sec.header}</h1>
 					{htmlToReact(sec.content)}
 				</ContentBlock>)
@@ -48,8 +52,8 @@ function MkBlocks({content,eventData}){
 		else if (sec.type === 'events') {
 			contentBlockArr.push(
 			
-					//fixthis
-					<Events key={JSON.stringify(sec)} secid={(sec.id !== undefined && sec.id !== '') ? sec.id : null} eventData={eventData}/>
+					
+					<DynamicEvents key={index} secid={(sec.id !== undefined && sec.id !== '') ? sec.id : null} eventData={eventData}/>
 				)
 		}
 		else if (sec.type === 'sections-with-toc') {
@@ -59,15 +63,16 @@ function MkBlocks({content,eventData}){
 
 			contentBlockArr.push(
 
-				<ContentBlock key={JSON.stringify(sec)}>
+				<ContentBlock key={index}>
 					<ul>
 						{toc}
 					</ul>
 
 				</ContentBlock>);
 
-			contentBlockArr.push(<MkBlocks key={JSON.stringify(sec.sections)} content={sec.sections} eventData={eventData}/>)
+			contentBlockArr.push(<MkBlocks key={index} content={sec.sections} eventData={eventData}/>)
 		}
+		index++;
 	}
 	return contentBlockArr;
 } 

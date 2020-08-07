@@ -47,17 +47,17 @@ export function EventsCtrl(props){
 	
 }
 export function EventList(props){
-	let eventTimeSlots=splitEventsIntoTimeSlot(props.eventData);
 
-	let eventTimeSlotsGroupedByDay=splitTimeslotsIntoDays(eventTimeSlots);
+	let eventTimeSlotsGroupedByDay=splitTimeslotsIntoDays(splitEventsIntoTimeSlot(props.eventData));
+
 	
 	
-	let dayArr=eventTimeSlotsGroupedByDay.map((day)=>{
-		return <EventDay key={day.dayStr} day={day}/>
+	let dayArr=eventTimeSlotsGroupedByDay.map((day,index)=>{
+		return <EventDay key={index} day={day}/>
 	});
 
 
-return <>{dayArr}</> ;
+return (<>{dayArr}</> );
 	
 }
 function EventsCalander(props){
@@ -66,7 +66,7 @@ function EventsCalander(props){
 	const [year,setYear]=useState(days[0].year);
 	const [month,setMonth]=useState(days[0].month);
 	const [displayCal,setDisplayCal]=useState(false);
-	return (<>
+	return (
 		<div style={{position:'sticky',bottom:0,backgroundColor:'lightgreen'}}>
 			{
 				displayCal ? <button onClick={()=>{setDisplayCal(false)}}>Hide Calander</button>:<button onClick={()=>{setDisplayCal(true)}}>Jump to Day...</button>
@@ -97,7 +97,7 @@ function EventsCalander(props){
 			</>)}
 			
 		</div>
-	</>);
+	);
 }
 function EventsMonth(props){
 	let daysInMonth=[];
@@ -224,7 +224,7 @@ export function EventTimeSlot(props){
 	let startDate=new Date(props.eventTimeSlot.timeslot.start_date*1000);
 	let endDate=new Date(props.eventTimeSlot.timeslot.end_date*1000)
 
-	return (<>
+	return (<div>
 			<h3>{event.title}</h3>
 			<div>
 			{event.is_virtual && (<span>Virtual</span>)} {humanizeEventType(event.event_type)}
@@ -243,7 +243,7 @@ export function EventTimeSlot(props){
 			<PopUpOverlay closeFunction={()=>{setSignup(false)}} display={signup}>
 				 <iframe style={{width:'100%',height:'100%',border:0}} src={event.browser_url}/>
 			</PopUpOverlay>
-	</>);
+	</div>);
 }
 
 function OtherTimeslots(props){
@@ -280,7 +280,7 @@ function EventLocation(props){
 			)
 			: (<EventField field="Location">Sign Up for the location</EventField>)
 			} 
-			{(event.address_visibility==='PUBLIC') && <>
+			{(event.address_visibility==='PUBLIC') && (<>
 
 				<a href={'https://www.google.com/maps/dir/?api=1&destination='+
 				encodeURIComponent(	event.location.address_lines.join(' ')+' '+
@@ -294,7 +294,7 @@ function EventLocation(props){
 
 				<div>{event.location.locality}, {event.location.region} {event.location.postal_code}</div>
 
-			</>	}	
+				</>)}	
 
 
 
