@@ -36,7 +36,7 @@ export async function getData(url){
 
 export async function getSwingLeftEvents(queryURL){
 	let theData=await getData(queryURL);
-	console.log(theData);
+	//console.log(theData);
 	let swingtxleftEvents=theData.filter(filterOnlySwingTXLeft);
 	return swingtxleftEvents;
 }
