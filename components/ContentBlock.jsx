@@ -12,7 +12,7 @@ export function ContentBlocks(props) {
 
 
 	
-	return <>  {mkBlocks(props.content,props.eventData)}</>;
+	return <MkBlocks content={props.content} eventData={props.eventData}/>;
 }
 
 // function htmlToReact(html){
@@ -34,7 +34,7 @@ export function ContentBlock(props){
 	</div>)
 }
 
-function mkBlocks(content,eventData){
+function MkBlocks({content,eventData}){
 	let contentBlockArr = [];
 	//note keys arnt ideal
 	for (let sec of content) {
@@ -66,7 +66,7 @@ function mkBlocks(content,eventData){
 
 				</ContentBlock>);
 
-			contentBlockArr = contentBlockArr.concat(mkBlocks(sec.sections))
+			contentBlockArr.push(<MkBlocks key={JSON.stringify(sec.sections)} content={sec.sections} eventData={eventData}/>)
 		}
 	}
 	return contentBlockArr;
