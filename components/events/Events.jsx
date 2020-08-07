@@ -165,8 +165,8 @@ function EventsMonth(props){
 							else if(props.days.some((el)=>{return day.date.getDate()===el.day;})){
 								let hoverText=props.days.find((el)=>{
 									return day.date.getDate()===el.day
-								}).etsArr.map((el)=>{
-									return <div>{el.event.title}</div>;
+								}).etsArr.map((el,index)=>{
+									return <div key={index}>{el.event.title}</div>;
 								});
 
 								return <td key={index}>
