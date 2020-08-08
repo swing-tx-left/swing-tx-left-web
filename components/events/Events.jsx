@@ -2,8 +2,8 @@ import useSWR from 'swr';
 import PopUpOverlay from '../PopUpOverlay';
 
 import {getSwingLeftEvents,splitEventsIntoTimeSlot,humanizeEventType,splitTimeslotsIntoDays} from '../../lib/util';
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
+import {v4 as uuidv4} from 'uuid';
 import styles from './Events.module.css'
 //function event
 
@@ -18,22 +18,19 @@ export function Events(props){
 	
 
 	let obj=useSWR('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now', getSwingLeftEvents,{initialData:props.eventData,revalidateOnMount:true});
-	
-		
+	const [isServer,setIsServer]=useState(true)
+	useEffect(()=>{
+		setIsServer(false);
+	});
+	let eventTimeSlotsGroupedByDay=splitTimeslotsIntoDays(splitEventsIntoTimeSlot(props.eventData));
 		//fix id mess
-		return (<>
-		<ContentBlock blockid={(props.secid !== undefined && props.secid  !== '') ? props.secid  : null}>
-
+	return (<React.Fragment>
+		<ContentBlock kblockid={(props.secid !== undefined && props.secid  !== '') ? props.secid  : null}>
 			<EventsCtrl eventData={obj.data}/>
 		</ContentBlock>
-		<EventList eventData={obj.data}/>
-		<EventsCalander eventData={obj.data}/>
-	</>);
-			
-		
-		
-
-
+		<EventList eventDataByDay={isServer ? props.eventDataByDay : eventTimeSlotsGroupedByDay}/>
+		<EventsCalander eventDataByDay={isServer ? props.eventDataByDay : eventTimeSlotsGroupedByDay}/>
+	</React.Fragment>);
 }
 
 
@@ -48,12 +45,10 @@ export function EventsCtrl(props){
 }
 export function EventList(props){
 
-	let eventTimeSlotsGroupedByDay=splitTimeslotsIntoDays(splitEventsIntoTimeSlot(props.eventData));
 
-	
-	
-	let dayArr=eventTimeSlotsGroupedByDay.map((day,index)=>{
-		return <EventDay key={index} day={day}/>
+	// let eventTimeSlotsGroupedByDay=splitTimeslotsIntoDays(splitEventsIntoTimeSlot(props.eventData));
+	let dayArr=props.eventDataByDay.map((day)=>{
+		return <EventDay key={day.uuid} day={day}/>
 	});
 
 
@@ -62,7 +57,7 @@ return (<>{dayArr}</> );
 }
 function EventsCalander(props){
 
-	let days=splitTimeslotsIntoDays(splitEventsIntoTimeSlot(props.eventData));
+	let days=props.eventDataByDay;
 	const [year,setYear]=useState(days[0].year);
 	const [month,setMonth]=useState(days[0].month);
 	const [displayCal,setDisplayCal]=useState(false);
@@ -109,12 +104,15 @@ function EventsMonth(props){
 	for (let d of daysInMonth){
 		if(d.getDate()===1){
 				let pastMonthDays=new Array(d.getDay());
-				pastMonthDays.fill({
-					type:'blank'
+				pastMonthDays=pastMonthDays.fill({
+					type:'blank',
+				}).map((el)=>{
+					return {...el,uuid:uuidv4()};
 				});
 				weeks.push(pastMonthDays.concat([{
 					type:'day',
-					date:d
+					date:d,
+					uuid:uuidv4()
 				}]));
 			
 		
@@ -127,14 +125,17 @@ function EventsMonth(props){
 			}
 				weeks[curWeek].push({
 					type:'day',
-					date:d
+					date:d,
+					uuid:uuidv4()
 				});
 		}
 	}
 
 	let nextMonthsDays=new Array(7-weeks[curWeek].length);
-	nextMonthsDays.fill({
+	nextMonthsDays=nextMonthsDays.fill({
 		type:'blank'
+	}).map((el)=>{
+		return {...el,uuid:uuidv4()};
 	});
 	weeks[curWeek].push(...nextMonthsDays)
 
@@ -155,21 +156,21 @@ function EventsMonth(props){
 				</tr>
 			</thead>
 			<tbody>
-				{weeks.map((week,weekIndex)=>{
+				{weeks.map((week)=>{
 					return(
-							<tr key={weekIndex}>
-						{week.map((day,index)=>{
+							<tr key={'week-of-'+week[0].uuid}>
+						{week.map((day)=>{
 							if(day.type==='blank'){
-								return <td key={index}></td>
+								return <td title={day.uuid} key={day.uuid}></td>
 							}
 							else if(props.days.some((el)=>{return day.date.getDate()===el.day;})){
 								let hoverText=props.days.find((el)=>{
 									return day.date.getDate()===el.day
-								}).etsArr.map((el,index)=>{
-									return <div key={index}>{el.event.title}</div>;
+								}).etsArr.map((el)=>{
+									return <div key={el.timeslot.id}>{el.event.title} {el.timeslot.id}</div>;
 								});
 
-								return <td key={index}>
+								return <td title={day.uuid} key={day.uuid}>
 									<div className={styles.dayPreview}>
 										<div className={styles.dayPreviewDay}> {day.date.getDate()}</div>
 								{hoverText}
@@ -180,7 +181,7 @@ function EventsMonth(props){
 								</td>
 							}
 							else{
-								return <td key={index}>{day.date.getDate()}</td>
+								return <td title={day.uuid} key={day.uuid}>{day.date.getDate()}</td>
 							}
 
 							
@@ -203,24 +204,45 @@ export function EventDay(props){
 		return <EventTimeSlot key={el.timeslot.id} eventTimeSlot={el}/> 
 	})
 	return (<ContentBlock blockid={'eventday-'+props.day.month+'-'+props.day.day+'-'+props.day.year}>
-		<h2>{props.day.dayStr}</h2>{timeslots}
+		<h2>{props.day.dayStr}</h2>{props.day.uuid}{timeslots}
 		</ContentBlock>)
 }
 
 export function EventTimeSlot(props){
 	const [signup,setSignup]=useState(false);
 	let event=props.eventTimeSlot.event;
-	let dateFormater=new Intl.DateTimeFormat(undefined,{
-		weekday:'long',
-		//era:'short',
-		year:'numeric',
-		month:'long',
-		day:'numeric',
-		hour:'numeric',
-		minute:'2-digit',
-		timeZoneName:'short'
-
+	const [isServer,setIsServer]=useState(true)
+	useEffect(()=>{
+		setIsServer(false);
 	});
+	let dateFormater
+
+	if(isServer){
+		dateFormater=new Intl.DateTimeFormat('en-US',{
+			weekday:'long',
+			//era:'short',
+			year:'numeric',
+			month:'long',
+			day:'numeric',
+			hour:'numeric',
+			minute:'2-digit',
+			timeZoneName:'short',
+			timeZone:'America/Chicago'
+		});
+	}
+	else{
+		dateFormater=new Intl.DateTimeFormat(undefined,{
+			weekday:'long',
+			//era:'short',
+			year:'numeric',
+			month:'long',
+			day:'numeric',
+			hour:'numeric',
+			minute:'2-digit',
+			timeZoneName:'short'
+		});
+	}
+
 	let startDate=new Date(props.eventTimeSlot.timeslot.start_date*1000);
 	let endDate=new Date(props.eventTimeSlot.timeslot.end_date*1000)
 
@@ -247,7 +269,14 @@ export function EventTimeSlot(props){
 }
 
 function OtherTimeslots(props){
-	let dateFormater=new Intl.DateTimeFormat(undefined,{
+	const [isServer,setIsServer]=useState(true)
+	useEffect(()=>{
+		setIsServer(false);
+	});
+	let dateFormater
+	
+	if(isServer){
+		dateFormater=new Intl.DateTimeFormat('en-US',{
 		weekday:'long',
 		//era:'short',
 		year:'numeric',
@@ -255,9 +284,24 @@ function OtherTimeslots(props){
 		day:'numeric',
 		hour:'numeric',
 		minute:'2-digit',
-		timeZoneName:'short'
+		timeZoneName:'short',
+		timeZone:'America/Chicago',
 
 	});
+	}
+	else{
+		dateFormater=new Intl.DateTimeFormat(undefined,{
+			weekday:'long',
+			//era:'short',
+			year:'numeric',
+			month:'long',
+			day:'numeric',
+			hour:'numeric',
+			minute:'2-digit',
+			timeZoneName:'short',
+		});
+	}
+		
 	let listItems=props.timeslots.map((t)=>{
 		return <li key={t.start_date+' '+t.end_date}>{dateFormater.format(t.start_date*1000)}</li>
 	});

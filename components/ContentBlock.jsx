@@ -1,6 +1,6 @@
 import styles from './ContentBlock.module.css'
 import {htmlToReact} from '../lib/util'
-// import {Events} from './events/Events';
+ import {Events} from './events/Events';
 import dynamic from 'next/dynamic';
 
 
@@ -15,7 +15,7 @@ export function ContentBlocks(props) {
 
 
 	
-	return <MkBlocks content={props.content} eventData={props.eventData}/>;
+	return <MkBlocks content={props.content} eventDataByDay={props.eventDataByDay}  eventData={props.eventData}/>;
 }
 
 // function htmlToReact(html){
@@ -37,14 +37,14 @@ export function ContentBlock(props){
 	</div>)
 }
 
-function MkBlocks({content,eventData}){
+function MkBlocks({content,eventData,eventDataByDay}){
 	let contentBlockArr = [];
 	//note keys arnt ideal
-	let index=0;
+	//let index=0;
 	for (let sec of content) {
 		if (sec.type === 'normal-section') {
 			contentBlockArr.push(
-				<ContentBlock  key={index} blockid={(sec.id !== undefined && sec.id !== '') ? sec.id : null}>
+				<ContentBlock  key={sec.uuid} blockid={(sec.id !== undefined && sec.id !== '') ? sec.id : null}>
 					<h1>{sec.header}</h1>
 					{htmlToReact(sec.content)}
 				</ContentBlock>)
@@ -53,26 +53,26 @@ function MkBlocks({content,eventData}){
 			contentBlockArr.push(
 			
 					
-					<DynamicEvents key={index} secid={(sec.id !== undefined && sec.id !== '') ? sec.id : null} eventData={eventData}/>
+					<Events key={sec.uuid} secid={(sec.id !== undefined && sec.id !== '') ? sec.id : null} eventData={eventData} eventDataByDay={eventDataByDay}/>
 				)
 		}
 		else if (sec.type === 'sections-with-toc') {
 			let toc = sec.sections.map((el) => {
-				return <li key={el.id}><a href={'#' + el.id}> {el.header}</a></li>
+				return <li key={'toc-list-item-'+el.uuid}><a href={'#' + el.id}> {el.header}</a></li>
 			});
 
 			contentBlockArr.push(
 
-				<ContentBlock key={index}>
+				<ContentBlock key={'table-of-contents-'+sec.uuid}>
 					<ul>
 						{toc}
 					</ul>
 
 				</ContentBlock>);
 
-			contentBlockArr.push(<MkBlocks key={index} content={sec.sections} eventData={eventData}/>)
+			contentBlockArr.push(<MkBlocks key={sec.uuid} content={sec.sections} eventData={eventData} eventDataByDay={eventDataByDay}/>)
 		}
-		index++;
+		
 	}
 	return contentBlockArr;
 } 

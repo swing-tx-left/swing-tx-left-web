@@ -2,7 +2,7 @@ import rehypeReact from 'rehype-react';
 import unified from 'unified';
 import rehypeParse from 'rehype-parse';
 import React from 'react';
-
+import {v4 as uuidv4} from 'uuid';
 
 export function htmlToReact(html){
 	return unified()
@@ -76,6 +76,7 @@ export function splitTimeslotsIntoDays(eventTimeSlots){
 				month:date.getMonth(),
 				day:date.getDate(),
 				year:date.getFullYear(),
+				uuid:uuidv4(),
 				etsArr:[curVal]
 			});
 		}
