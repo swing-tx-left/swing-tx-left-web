@@ -186,6 +186,9 @@ function EventsMonth(props){
 									onMouseLeave={()=>{
 										setCurrentDay(null);
 									}}
+									onTouchStart={(e)=>{
+										e.preventDefault();
+									}}
 									>
 										
 										<a href={'#eventday-'+day.date.getMonth()+'-'+day.date.getDate()+'-'+day.date.getFullYear()}>{day.date.getDate()}</a>
