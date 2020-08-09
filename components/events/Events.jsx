@@ -14,15 +14,12 @@ import {ContentBlock} from '../ContentBlock'
 
 
 export function Events(props){
-
-	
-
 	let obj=useSWR('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now', getSwingLeftEvents,{initialData:props.eventData,revalidateOnMount:true});
 	const [isServer,setIsServer]=useState(true)
 	useEffect(()=>{
 		setIsServer(false);
 	});
-	let eventTimeSlotsGroupedByDay=splitTimeslotsIntoDays(splitEventsIntoTimeSlot(props.eventData));
+	let eventTimeSlotsGroupedByDay=splitTimeslotsIntoDays(splitEventsIntoTimeSlot(obj.data),isServer);
 		//fix id mess
 	return (<React.Fragment>
 		<ContentBlock kblockid={(props.secid !== undefined && props.secid  !== '') ? props.secid  : null}>
@@ -61,17 +58,7 @@ function EventsCalander(props){
 	const [year,setYear]=useState(days[0].year);
 	const [month,setMonth]=useState(days[0].month);
 	const [displayCal,setDisplayCal]=useState(false);
-	return (
-		<div style={{position:'sticky',bottom:0,backgroundColor:'lightgreen'}}>
-			{
-				displayCal ? <button onClick={()=>{setDisplayCal(false)}}>Hide Calander</button>:<button onClick={()=>{setDisplayCal(true)}}>Jump to Day...</button>
-			}
-			{displayCal&&(<>
-				
-			<EventsMonth days={days.filter((day)=>{
-				return day.month===month&&day.year===year;
-			})} month={month} year={year}/>
-			<button onClick={()=>{
+	let previousMonth=()=>{
 				if(month===0){
 					setYear(year-1);
 					setMonth(11);
@@ -79,8 +66,8 @@ function EventsCalander(props){
 				else{
 					setMonth(month-1);
 				}
-			}}>Month-</button>
-			<button onClick={()=>{
+			}
+	let nextMonth=()=>{
 				if(month===11){
 					setYear(year+1);
 					setMonth(0);
@@ -88,18 +75,35 @@ function EventsCalander(props){
 				else{
 					setMonth(month+1);
 				}
-			}}>Month+</button>
+			}
+	return (
+		<div className={styles.eventQuickCalander}>
+			{
+				displayCal ? <button className={styles.eventQuickCalanderButton} onClick={()=>{setDisplayCal(false)}}>Hide Calander</button>:<button className={styles.eventQuickCalanderButton} onClick={()=>{setDisplayCal(true)}}>Jump to Day...</button>
+			}
+			{displayCal&&(<>
+			
+		
+		
+			{/* <button onClick={pastMonth}>Month-</button>
+			<button onClick={nextMonth}>Month+</button>	 */}
+			<EventsMonth nextMonthFunction={nextMonth} previousMonthFunction={previousMonth}  days={days.filter((day)=>{
+				return day.month===month&&day.year===year;
+			})} month={month} year={year}/>
 			</>)}
 			
 		</div>
 	);
 }
+//Not for serverside use
 function EventsMonth(props){
 	let daysInMonth=[];
 	let weeks=[];
-	for (let d=new Date(props.year,props.month,1);d.getMonth()===props.month;d=new Date(d.getTime()+(24*60*60*1000))){			
+	const [currentDay,setCurrentDay]=useState(null);
+	for (let d=new Date(props.year,props.month,1);d.getMonth()===props.month;
+	d=new Date((new Date(d)).setDate(1+d.getDate()))){			
 		daysInMonth.push(d);
-	}
+	}	
 	let curWeek=0;
 	for (let d of daysInMonth){
 		if(d.getDate()===1){
@@ -114,23 +118,20 @@ function EventsMonth(props){
 					date:d,
 					uuid:uuidv4()
 				}]));
-			
-		
-			
 		}
 		else{
 			if(weeks[curWeek].length>6){
 				weeks.push([]);
-				curWeek++;
+				curWeek=curWeek+1;
 			}
-				weeks[curWeek].push({
-					type:'day',
-					date:d,
-					uuid:uuidv4()
-				});
+			weeks[curWeek].push({
+				type:'day',
+				date:d,
+				uuid:uuidv4()
+			});
 		}
 	}
-
+	
 	let nextMonthsDays=new Array(7-weeks[curWeek].length);
 	nextMonthsDays=nextMonthsDays.fill({
 		type:'blank'
@@ -138,61 +139,94 @@ function EventsMonth(props){
 		return {...el,uuid:uuidv4()};
 	});
 	weeks[curWeek].push(...nextMonthsDays)
+	let monthNameArr=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'];
 
 
 	return (<>
-		<div>{props.month+1}/{props.year}</div>
-		{/* <pre>{JSON.stringify(weeks,null,'\t')}</pre> */}
-		<table className={styles.eventQuickCalander}>
-			<thead>
-				<tr>
-					<td>Sun</td>
-					<td>Mon</td>
-					<td>Tues</td>
-					<td>Wed</td>
-					<td>Thurs</td>
-					<td>Fri</td>
-					<td>Sat</td>
-				</tr>
-			</thead>
-			<tbody>
-				{weeks.map((week)=>{
-					return(
-							<tr key={'week-of-'+week[0].uuid}>
-						{week.map((day)=>{
-							if(day.type==='blank'){
-								return <td title={day.uuid} key={day.uuid}></td>
-							}
-							else if(props.days.some((el)=>{return day.date.getDate()===el.day;})){
-								let hoverText=props.days.find((el)=>{
-									return day.date.getDate()===el.day
-								}).etsArr.map((el)=>{
-									return <div key={el.timeslot.id}>{el.event.title} {el.timeslot.id}</div>;
-								});
-
-								return <td title={day.uuid} key={day.uuid}>
-									<div className={styles.dayPreview}>
-										<div className={styles.dayPreviewDay}> {day.date.getDate()}</div>
-								{hoverText}
-								</div>
-									<a href={'#eventday-'+day.date.getMonth()+'-'+day.date.getDate()+'-'+day.date.getFullYear()}>{day.date.getDate()}</a>
-								
-								
-								</td>
-							}
-							else{
-								return <td title={day.uuid} key={day.uuid}>{day.date.getDate()}</td>
-							}
-
-							
-						})}
-					</tr>
-					)
-				
-				})}
+		<div className={styles.eventQuickMonthBlock}>
 			
-			</tbody>
-		</table>
+	
+		<div className={styles.eventQuickMonthTitle}>{monthNameArr[props.month]} {props.year}</div>
+		{/* <pre>{JSON.stringify(weeks,null,'\t')}</pre> */}
+			<table className={styles.eventQuickMonth}>
+				<thead>
+					<tr>
+						<td>Sun</td>
+						<td>Mon</td>
+						<td>Tues</td>
+						<td>Wed</td>
+						<td>Thurs</td>
+						<td>Fri</td>
+						<td>Sat</td>
+					</tr>
+				</thead>
+				<tbody>
+					{weeks.map((week)=>{
+						return(	
+								<tr key={'week-of-'+week[0].uuid}>
+							{week.map((day)=>{
+								if(day.type==='blank'){
+									return <td key={day.uuid}></td>
+								}
+								else if(props.days.some((el)=>{return day.date.getDate()===el.day;})){
+									let hoverText=props.days.find((el)=>{
+										return day.date.getDate()===el.day
+									}).etsArr.map((el)=>{
+										return <div key={el.timeslot.id}>{el.event.title} </div>;
+									});
+
+									return <td key={day.uuid} onMouseEnter={(e)=>{
+										setCurrentDay({
+											x:e.currentTarget.getBoundingClientRect().x,
+											y:window.innerHeight-e.currentTarget.getBoundingClientRect().y,
+											hoverText:hoverText,
+											day:day
+										});
+									}}
+									onMouseLeave={()=>{
+										setCurrentDay(null);
+									}}
+									>
+										
+										<a href={'#eventday-'+day.date.getMonth()+'-'+day.date.getDate()+'-'+day.date.getFullYear()}>{day.date.getDate()}</a>
+									
+									
+									</td>
+								}
+								else{
+									return <td title={day.uuid} key={day.uuid}>{day.date.getDate()}</td>
+								}
+
+								
+							})}
+						</tr>
+						)
+					
+					})}
+				
+				</tbody>
+			</table>	
+			<div  className={styles.eventQuickMonthButtonRow}>
+
+
+				<button className={styles.eventQuickMonthButton} onClick={props.previousMonthFunction}>Previous</button>
+
+
+				<button className={styles.eventQuickMonthButton} onClick={props.nextMonthFunction}>Next</button>
+
+
+		</div>
+	
+			{currentDay!==null&&
+			
+				<div style={{bottom:currentDay.y,left:currentDay.x}} className={styles.dayPreview}>
+					<div className={styles.dayPreviewDay}> {currentDay.day.date.getDate()}
+					</div>
+					{currentDay.hoverText}
+				</div>
+			
+			}
+	</div>
 	</>);
 
 }
@@ -204,7 +238,7 @@ export function EventDay(props){
 		return <EventTimeSlot key={el.timeslot.id} eventTimeSlot={el}/> 
 	})
 	return (<ContentBlock blockid={'eventday-'+props.day.month+'-'+props.day.day+'-'+props.day.year}>
-		<h2>{props.day.dayStr}</h2>{props.day.uuid}{timeslots}
+		<h2>{props.day.dayStr}</h2>{timeslots}
 		</ContentBlock>)
 }
 

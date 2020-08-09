@@ -57,10 +57,34 @@ export function splitEventsIntoTimeSlot(events){
 		return fel.timeslot.start_date-sel.timeslot.start_date;
 	});
 }
-export function splitTimeslotsIntoDays(eventTimeSlots){
+export function splitTimeslotsIntoDays(eventTimeSlots,isServer=true){
+	let dateFormater;
+	if(isServer){
+		dateFormater=new Intl.DateTimeFormat('en-US',{
+			weekday:'short',
+			year:'numeric',
+			month:'short',
+			day:'2-digit',
+			timeZone:'America/Chicago'
+		});
+	}
+	else{
+		dateFormater=new Intl.DateTimeFormat(undefined,{
+			weekday:'short',
+			year:'numeric',
+			month:'short',
+			day:'2-digit',
+		});
+	}
+
+
 	return eventTimeSlots.reduce((groupedArr,curVal)=>{
-		let date=new Date(curVal.timeslot.start_date*1000)
-		let etsStart=date.toDateString();
+		let date=new Date(curVal.timeslot.start_date*1000);
+		let dateParts=dateFormater.formatToParts(date).reduce((parts,cur)=>{
+			parts[cur.type]=cur.value;
+			return parts;
+		},{});
+		let etsStart=`${dateParts.weekday} ${dateParts.month} ${dateParts.day} ${dateParts.year}`;
 		let dateExistAlready=groupedArr.some((el)=>{
 			return el.dayStr===etsStart;
 		});

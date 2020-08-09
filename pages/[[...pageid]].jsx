@@ -23,7 +23,15 @@ export default function Page(props) {
 			</main>
 		
 
-
+			<footer>
+				<p>some footer content</p>
+				<p>some footer content</p>
+				<p>some footer content</p>
+				<p>some footer content</p>
+				<p>some footer content</p>
+				<p>some footer content</p>
+				<p>some footer content</p>
+			</footer>
 
 			{/* <details><pre>{JSON.stringify(props, null, '\t')}</pre></details> */}
 			<CSSGlobalVars/>

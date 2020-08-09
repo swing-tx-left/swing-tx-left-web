@@ -1,25 +1,110 @@
-.eventQuickCalander td .dayPreview{
-	position: absolute;
+
+.eventQuickCalander{
+	position:sticky;
+	bottom:2rem;
+	/* bottom:2rem;
+	/* margin-left: 2rem;
+	margin-top: 2rem; */
+	/* background-color: lavender;
+	padding: 2rem;  */
+	/* width:max-content; */
+	width:max-content;
+	
+	
+}
+
+.eventQuickCalanderButton{
+	background-color:lightgreen;
+	/* margin:2rem 2rem; */
+	border-width: 0;
+	font-size: 1rem;
+	padding: 1rem;
+	margin-left: 2rem;
+	margin-top: 2rem;
+	display: block;
+}
+
+.eventQuickMonthButtonRow{
+	display: grid;
+	grid-template-columns: 50% 50%;
+}
+.eventQuickMonthButton{
+	border-width: 0;
+	margin:0.5rem;
+	font-size: 1rem;
+	padding: 0.5rem;
+	background-color: rgb(159, 45, 235);
+	
+}
+.eventQuickMonthTitle{
+	padding: 0.2rem;
+	text-align: center;
+	/* height: 10rem; */
+	border-spacing: 0;
+	/* border-style: solid;
+	border-width: 0.05rem;
+	border-color: red; */
+	
+}
+.eventQuickMonthBlock{
+	width: max-content;
+	margin-left:2rem;
+	background-color: rgb(38, 186, 231);
+}
+.eventQuickMonth{
+	
+	
+	/* height: 10rem; */
+	border-spacing: 0;
+	/* border-style: solid;
+	border-width: 0.05rem;
+	border-color: red; */
+	
+}
+
+
+.eventQuickMonth td{
+	margin: 0;
+	padding: 0.5rem;
+	text-align: center;
+	background-color: rgb(116, 240, 123);
+	/* border-style: solid;
+	border-width: 0.05rem;
+	border-color: red; */
+	border-style: solid;
+	border-width: 0 0 0.1rem 0;
+	border-color: rgb(14, 77, 17);
+	
+}
+.eventQuickMonth td:nth-child(2n){
+
+	background-color: rgb(137, 226, 65);
+	/* border-style: solid;
+	border-width: 0.05rem;
+	border-color: red; */
+	
+}
+
+.dayPreview{
+	
+	position: fixed;
 	
 	/* top:0%; */
 	
-	transform:translateY(calc( -100% - 0.5rem )) ;
-	transform-origin: 100% 100%;
+	/* transform:translateY(calc( -100% - 0.5rem )) ;
+	transform-origin: 100% 100%; */
 	pointer-events: none;
-	visibility: hidden;
+
 	padding: 2rem;
 	background-color:rgb(92, 180, 252);
-	opacity: 0;
+
 	transition: display 0s, opacity 0.5s;
 
 }
-.eventQuickCalander td:hover .dayPreview{
-	opacity: 1;
-	
-	visibility: visible;
-}
+
 
 .dayPreviewDay{
+
 	text-align: center;
 	
 	font-weight: bold;
