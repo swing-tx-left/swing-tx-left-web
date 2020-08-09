@@ -175,20 +175,22 @@ function EventsMonth(props){
 										return <div key={el.timeslot.id}>{el.event.title} </div>;
 									});
 
-									return <td key={day.uuid} onMouseEnter={(e)=>{
-										setCurrentDay({
-											x:e.currentTarget.getBoundingClientRect().x,
-											y:window.innerHeight-e.currentTarget.getBoundingClientRect().y,
-											hoverText:hoverText,
-											day:day
-										});
+									return <td key={day.uuid} onPointerEnter={(e)=>{
+										if(e.pointerType==='mouse'||e.pointerType==='pen'){
+											setCurrentDay({
+												x:e.currentTarget.getBoundingClientRect().x,
+												y:window.innerHeight-e.currentTarget.getBoundingClientRect().y,
+												hoverText:hoverText,
+												day:day
+											});
+										console.log(day)
+										}
+										
 									}}
-									onMouseLeave={()=>{
+									onPointerLeave={()=>{
 										setCurrentDay(null);
 									}}
-									onTouchStart={(e)=>{
-										e.preventDefault();
-									}}
+									
 									>
 										
 										<a href={'#eventday-'+day.date.getMonth()+'-'+day.date.getDate()+'-'+day.date.getFullYear()}>{day.date.getDate()}</a>
@@ -212,10 +214,17 @@ function EventsMonth(props){
 			<div  className={styles.eventQuickMonthButtonRow}>
 
 
-				<button className={styles.eventQuickMonthButton} onClick={props.previousMonthFunction}>Previous</button>
+				<button className={styles.eventQuickMonthButton} onClick={()=>{
+					setCurrentDay(null);
+					props.previousMonthFunction();
+					
+				}}>Previous</button>
 
 
-				<button className={styles.eventQuickMonthButton} onClick={props.nextMonthFunction}>Next</button>
+				<button className={styles.eventQuickMonthButton} onClick={()=>{
+					setCurrentDay(null);
+					props.nextMonthFunction();
+				}}>Next</button>
 
 
 		</div>
