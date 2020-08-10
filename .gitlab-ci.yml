@@ -5,7 +5,7 @@ pages:
       - .next/
       - .npm/ 
   script:
-    - npm ci --cache .npm 
+    - npm ci --cache .npm --prefer-offline
     - npm run export
     - rm -rf public
     - mkdir -p public
