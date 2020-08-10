@@ -307,7 +307,7 @@ export function EventTimeSlot(props){
 
 
 			<EventDescription content={event.description}/>
-			<button onClick={()=>{setSignup(!signup)}}>Submit</button>
+			<button onClick={()=>{setSignup(!signup)}}>Sign Up</button>
 			<PopUpOverlay closeFunction={()=>{setSignup(false)}} display={signup}>
 				 <iframe style={{width:'100%',height:'100%',border:0}} src={event.browser_url}/>
 			</PopUpOverlay>
@@ -372,7 +372,7 @@ function EventLocation(props){
 			} 
 			{(event.address_visibility==='PUBLIC') && (<>
 
-				<a href={'https://www.google.com/maps/dir/?api=1&destination='+
+				<a target="_blank" rel="noreferrer" href={'https://www.google.com/maps/dir/?api=1&destination='+
 				encodeURIComponent(	event.location.address_lines.join(' ')+' '+
 				event.location.locality+', '+
 				event.location.region+' '+
