@@ -1,0 +1,128 @@
+.mainHeader{
+	background-color: var(--site-black);
+	display:flex;
+	justify-content: space-around;
+	width:100%;
+	flex-wrap: wrap;
+	line-height:1;
+
+
+
+	height: 3rem; 
+	overflow: hidden;
+
+
+}
+
+/* header .site-logo{
+	display:inline-block;
+	
+} */
+
+
+.siteLogo{
+	height:2.4rem;
+	max-width: 70vw;
+	width: auto;
+	object-fit:contain;
+	margin: 0.3rem;
+	margin-left: 1rem;
+}
+
+.hamburgerButton{
+	/* display: none; */
+	background-color: transparent;
+	outline: none;
+	color: var(--site-white);
+	/* text-shadow:0 0 0.5rem var(--site-white) ; */
+	font-size: 1rem;
+	padding: 0;
+	margin: 0;
+	margin-right:1rem ;
+	border-width: 0;
+	max-width:20vw;
+	height:3rem ;
+	width:2rem;
+	content:"";
+	overflow: hidden;
+	background-image:linear-gradient(var(--site-black) 25%,var(--logo-blue)25% 35%,var(--site-black)35% 45%,var(--logo-pink) 45% 55%,var(--site-black) 55% 65%,var(--logo-blue) 65% 75%,var(--site-black)75% 100%) ;
+}
+.hamNav{
+	position: fixed;
+	top:calc(3vh + 3vmin );
+	display: block;
+	left:calc( 10vw  + 2vmin);
+	z-index:999999;
+	background-color: var(--site-black);
+	padding: 1rem;
+	width: calc( 80vw - 2rem - 4vmin);
+	max-height:calc(94vh - 2rem - 6vmin);
+	overflow-y:auto;
+	box-shadow: 2vmin 2vmin 0rem 0 var(--logo-blue), -2vmin -2vmin 0rem 0 var(--logo-pink);
+}
+
+.hamNav>ul{
+	display: contents;
+}
+.hamNav>ul>li{
+	display: contents;
+}
+
+.navBar{
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.navBar>ul{
+	display: contents;
+}
+.navBar>ul>li{
+	display: contents;
+}
+
+.navBarLink{
+	
+	display:inline-block;
+	font-size: 1.2rem;
+	/* will-change:padding,border; */
+	padding:0.9rem 0.9rem 0.4rem 0.9rem;
+
+	/* background-color:black; */
+	/* border-color: #ED5B67; */
+
+	border-color: rgba(var(--site-black-red),var(--site-black-green),var(--site-black-blue),0);
+	border-style:solid;
+
+	color:var(--logo-blue);
+	margin:0 0 0.3rem 0;
+	border-width: 0 0 0.2rem 0;
+	transition: border-color 0.5s linear;
+
+}
+
+li:nth-child(2n+1)>.navBarLink{
+	color:var(--logo-pink);
+}
+
+.navBarLink:hover{
+	text-decoration: none;
+	border-color: var(--logo-pink);
+	/* margin-bottom:0rem;
+	border-bottom-width:1.5rem; */
+
+}
+
+li:nth-child(2n+1)>.navBarLink:hover{
+	border-color: var(--logo-blue);
+	
+}
+
+
+.hamNav .navBarLink{
+	text-align: center;
+	display:block;
+	font-size: 1rem;
+	padding:0.5rem 0.3rem;
+	border-width:0 0.2rem;
+}
