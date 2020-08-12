@@ -14,16 +14,66 @@ import {ContentBlock} from '../ContentBlock'
 
 
 export function Events(props){
-	let obj=useSWR('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now', getSwingLeftEvents,{initialData:props.eventData,revalidateOnMount:true});
-	const [isServer,setIsServer]=useState(true)
+	let allEvents=useSWR('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now', getSwingLeftEvents,{initialData:props.eventData,revalidateOnMount:true});
+
+	let selectedEventsData=useSWR('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now', getSwingLeftEvents,{initialData:props.eventData,revalidateOnMount:true});
+	const [isServer,setIsServer]=useState(true);
+	
 	useEffect(()=>{
 		setIsServer(false);
 	});
-	let eventTimeSlotsGroupedByDay=splitTimeslotsIntoDays(splitEventsIntoTimeSlot(obj.data),isServer);
+	const [selectedEventTypes,setSelectedEventTypes]=useState([]);
+	let handleEventTypeChange=(etype)=>{
+		if(selectedEventTypes.includes(etype)){
+			setSelectedEventTypes(selectedEventTypes.filter((et)=>{return et!==etype}))
+		}
+		else{
+			setSelectedEventTypes(selectedEventTypes.concat([etype]));
+		}
+	}
+	const [selectedVirtual,setSelectedVirtual]=useState(false);
+	let handelEventVirtualChange=()=>{
+		if(selectedVirtual){
+			setSelectedVirtual(false);
+		}
+		else{
+			setSelectedVirtual(true);
+		}
+	};
+
+	const [selectedPublic,setSelectedPublic]=useState(false);
+	let handelEventPublicChange=()=>{
+		if(selectedPublic){
+			setSelectedPublic(false);
+		}
+		else{
+			setSelectedPublic(true);
+		}
+	};
+
+
+	//console.log(selectedEventsData)
+	let selectedEvents=selectedEventsData.data.filter((ev)=>{
+		let eventTypeCheck=selectedEventTypes.includes(ev.event_type)||selectedEventTypes.length===0;
+		let virtualAndPublicCheck=selectedVirtual===selectedPublic||ev.is_virtual&&selectedVirtual||!ev.is_virtual&&selectedPublic
+
+		return eventTypeCheck&&virtualAndPublicCheck;
+	});
+	
+	let eventTimeSlotsGroupedByDay=splitTimeslotsIntoDays(splitEventsIntoTimeSlot(selectedEvents),isServer);
 		//fix id mess
 	return (<React.Fragment>
 		<ContentBlock kblockid={(props.secid !== undefined && props.secid  !== '') ? props.secid  : null}>
-			<EventsCtrl eventData={obj.data}/>
+			<EventsCtrl eventData={allEvents.data} 
+			selectedEventTypes={selectedEventTypes} 
+			handleEventTypeChange={handleEventTypeChange}
+			
+			selectedVirtual={selectedVirtual}
+			handelEventVirtualChange={handelEventVirtualChange}
+			setSelectedPublic={setSelectedPublic}
+			handelEventPublicChange={handelEventPublicChange}
+
+			/>
 		</ContentBlock>
 		<EventList eventDataByDay={isServer ? props.eventDataByDay : eventTimeSlotsGroupedByDay}/>
 		<EventsCalander eventDataByDay={isServer ? props.eventDataByDay : eventTimeSlotsGroupedByDay}/>
@@ -32,11 +82,33 @@ export function Events(props){
 
 
 export function EventsCtrl(props){
-	return (
-		
+	let eventTypes=props.eventData.reduce((acc,curr)=>{
+		if(!acc.includes(curr.event_type)){
+			acc.push(curr.event_type);
+		}
+		return acc;
+	},[]);
 	
-		<pre>Event controls go here {JSON.stringify(props.eventData.length,null,'\t')}</pre>
+	let eventTypeCheckBoxes=eventTypes.map((etype)=>{
+		return (<label key={etype}>
 		
+		<input type="checkbox" checked={props.selectedEventTypes.includes(etype)} onChange={()=>{
+			props.handleEventTypeChange(etype);
+		}}/>
+		{humanizeEventType(etype)}
+		</label>);
+	});
+
+	return (
+		<>
+		<form>
+			{eventTypeCheckBoxes}
+		</form>
+		<form>
+			<label>Virtual<input type="checkbox" checked={props.selectedPublic} onChange={props.handelEventVirtualChange}  /></label>
+			<label>Public<input type="checkbox" checked={props.selectedPublic} onChange={props.handelEventPublicChange}/></label>
+		</form>
+		</>
 		);
 	
 }
@@ -55,8 +127,9 @@ return (<>{dayArr}</> );
 function EventsCalander(props){
 
 	let days=props.eventDataByDay;
-	const [year,setYear]=useState(days[0].year);
-	const [month,setMonth]=useState(days[0].month);
+	//TODO set this properly to current month
+	const [year,setYear]=useState(days.length > 0 ? days[0].year : 2020);
+	const [month,setMonth]=useState(days.length > 0 ? days[0].month : 7);
 	const [displayCal,setDisplayCal]=useState(false);
 	let previousMonth=()=>{
 				if(month===0){
@@ -95,7 +168,7 @@ function EventsCalander(props){
 		</div>
 	);
 }
-//Not for serverside use
+//Not for serverside use (dont have opened by default)
 function EventsMonth(props){
 	let daysInMonth=[];
 	let weeks=[];
@@ -140,7 +213,12 @@ function EventsMonth(props){
 	});
 	weeks[curWeek].push(...nextMonthsDays)
 	let monthNameArr=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'];
-
+	let timeFormater=new Intl.DateTimeFormat(undefined,{
+		hour:'numeric',
+		minute:'2-digit',
+		timeZoneName:'short',
+		timeZone:'America/Chicago'
+	});
 
 	return (<>
 		<div className={styles.eventQuickMonthBlock}>
@@ -172,7 +250,8 @@ function EventsMonth(props){
 									let hoverText=props.days.find((el)=>{
 										return day.date.getDate()===el.day
 									}).etsArr.map((el)=>{
-										return <div key={el.timeslot.id}>{el.event.title} </div>;
+										let time=timeFormater.format(new Date(el.timeslot.start_date*1000));
+									return <div key={el.timeslot.id}>{el.event.title} {time}</div>;
 									});
 
 									return <td key={day.uuid} onPointerEnter={(e)=>{
@@ -183,7 +262,6 @@ function EventsMonth(props){
 												hoverText:hoverText,
 												day:day
 											});
-										console.log(day)
 										}
 										
 									}}
