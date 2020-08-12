@@ -15,8 +15,7 @@ import {ContentBlock} from '../ContentBlock'
 
 export function Events(props){
 	let allEvents=useSWR('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now', getSwingLeftEvents,{initialData:props.eventData,revalidateOnMount:true});
-
-	let selectedEventsData=useSWR('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now', getSwingLeftEvents,{initialData:props.eventData,revalidateOnMount:true});
+	
 	const [isServer,setIsServer]=useState(true);
 	
 	useEffect(()=>{
@@ -51,18 +50,71 @@ export function Events(props){
 		}
 	};
 
+	const [inputZipCode,setInputZipCode]=useState('');
+	let handleZipCodeChange=(input)=>{
+		setInputZipCode(input.replace(/\D/g,''));
+	}
 
+	const [inputMaxMiles,setInputMaxMiles]=useState('');
+	let handleMaxMilesChange=(input)=>{
+		setInputMaxMiles(input)
+	}
+
+
+	let resetCtrlInputs=()=>{
+		setSelectedEventTypes([]);
+		setSelectedVirtual(false);
+		setSelectedPublic(false);
+		setInputZipCode('')
+		setInputMaxMiles('');
+	}
+
+
+	let shouldFetchGeoEvents=()=>{
+		let miles=parseInt(inputMaxMiles);
+		return inputZipCode.length===5&&inputMaxMiles!==''&&miles!==NaN&&miles>0;
+	}
+		
+
+	let mobilzeUrlAdditions=()=>{
+		if(shouldFetchGeoEvents()){
+			return '&zipcode='+inputZipCode+'&max_dist='+inputMaxMiles;
+		}
+		else{
+			return '';
+		}	
+	}
+
+	let selectedEventsData=useSWR('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now'+mobilzeUrlAdditions(), getSwingLeftEvents,{initialData:props.eventData,revalidateOnMount:true});
+
+
+	//cleanup 
+	let selectedEvents=selectedEventsData.data
+	if(shouldFetchGeoEvents()&&(
+		(selectedVirtual && selectedPublic) || //not needed
+		(!selectedVirtual && !selectedPublic)  ||
+		(selectedVirtual)
+		)  ){
+			console.log('merging virt with geo!')
+		selectedEvents=selectedEvents.concat(allEvents.data.filter((ev)=>{
+			return ev.is_virtual;
+		}));
+		
+
+	}
 	//console.log(selectedEventsData)
-	let selectedEvents=selectedEventsData.data.filter((ev)=>{
+	selectedEvents=selectedEvents.filter((ev)=>{
 		let eventTypeCheck=selectedEventTypes.includes(ev.event_type)||selectedEventTypes.length===0;
 		let virtualAndPublicCheck=selectedVirtual===selectedPublic||ev.is_virtual&&selectedVirtual||!ev.is_virtual&&selectedPublic
 
 		return eventTypeCheck&&virtualAndPublicCheck;
 	});
+
+	
 	
 	let eventTimeSlotsGroupedByDay=splitTimeslotsIntoDays(splitEventsIntoTimeSlot(selectedEvents),isServer);
 		//fix id mess
-	return (<React.Fragment>
+	return (<>
 		<ContentBlock kblockid={(props.secid !== undefined && props.secid  !== '') ? props.secid  : null}>
 			<EventsCtrl eventData={allEvents.data} 
 			selectedEventTypes={selectedEventTypes} 
@@ -70,14 +122,20 @@ export function Events(props){
 			
 			selectedVirtual={selectedVirtual}
 			handelEventVirtualChange={handelEventVirtualChange}
-			setSelectedPublic={setSelectedPublic}
+			selectedPublic={selectedPublic}
 			handelEventPublicChange={handelEventPublicChange}
 
+			inputZipCode={inputZipCode}
+			handleZipCodeChange={handleZipCodeChange}
+			inputMaxMiles={inputMaxMiles}
+			handleMaxMilesChange={handleMaxMilesChange}
+
+			resetCtrlInputs={resetCtrlInputs}
 			/>
 		</ContentBlock>
 		<EventList eventDataByDay={isServer ? props.eventDataByDay : eventTimeSlotsGroupedByDay}/>
 		<EventsCalander eventDataByDay={isServer ? props.eventDataByDay : eventTimeSlotsGroupedByDay}/>
-	</React.Fragment>);
+	</>);
 }
 
 
@@ -105,9 +163,21 @@ export function EventsCtrl(props){
 			{eventTypeCheckBoxes}
 		</form>
 		<form>
-			<label>Virtual<input type="checkbox" checked={props.selectedPublic} onChange={props.handelEventVirtualChange}  /></label>
+			<label>Virtual<input type="checkbox" checked={props.selectedVirtual} onChange={props.handelEventVirtualChange}  /></label>
 			<label>Public<input type="checkbox" checked={props.selectedPublic} onChange={props.handelEventPublicChange}/></label>
 		</form>
+		<form>
+			<label>Zipcode<input type="text" value={props.inputZipCode} onChange={(ev)=>{props.handleZipCodeChange(ev.currentTarget.value)}}/></label>
+			<label>Max Miles<input type="number" value={props.inputMaxMiles} onChange={(ev)=>{props.handleMaxMilesChange(ev.currentTarget.value)}}/></label>
+		</form>
+		<button onClick={props.resetCtrlInputs}>Reset All</button>
+		{/* <pre>{JSON.stringify({
+			selectedEventTypes:props.selectedEventTypes,
+			selectedVirtual:props.selectedVirtual,
+			selectedPublic:props.selectedPublic,
+			inputZipCode:props.inputZipCode,
+			inputMaxMiles:props.inputMaxMiles
+		},null,'\t')}</pre> */}
 		</>
 		);
 	
