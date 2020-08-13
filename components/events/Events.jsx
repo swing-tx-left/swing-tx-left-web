@@ -14,7 +14,7 @@ import {ContentBlock} from '../ContentBlock'
 
 
 export function Events(props){
-	let allEvents=useSWR('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now', getSwingLeftEvents,{initialData:props.eventData,revalidateOnMount:true});
+	let allEvents=useSWR('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now', getSwingLeftEvents,{initialData:props.eventData,revalidateOnMount:true,errorRetryCount:2});
 	
 	const [isServer,setIsServer]=useState(true);
 	
@@ -52,7 +52,10 @@ export function Events(props){
 
 	const [inputZipCode,setInputZipCode]=useState('');
 	let handleZipCodeChange=(input)=>{
-		setInputZipCode(input.replace(/\D/g,''));
+		if(input.length<6){
+			setInputZipCode(input.replace(/\D/g,''));
+		}
+		
 	}
 
 	const [inputMaxMiles,setInputMaxMiles]=useState('');
@@ -85,7 +88,7 @@ export function Events(props){
 		}	
 	}
 
-	let selectedEventsData=useSWR('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now'+mobilzeUrlAdditions(), getSwingLeftEvents,{initialData:props.eventData,revalidateOnMount:true});
+	let selectedEventsData=useSWR('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now'+mobilzeUrlAdditions(), getSwingLeftEvents,{initialData:props.eventData,revalidateOnMount:true,errorRetryCount:2});
 
 
 	//cleanup 
@@ -109,11 +112,31 @@ export function Events(props){
 
 		return eventTypeCheck&&virtualAndPublicCheck;
 	});
-
+	
 	
 	
 	let eventTimeSlotsGroupedByDay=splitTimeslotsIntoDays(splitEventsIntoTimeSlot(selectedEvents),isServer);
-		//fix id mess
+	let ctrlMessages=[];
+	if(inputZipCode!==''&&inputZipCode.length!==5){
+		ctrlMessages.push({message:'ZipCode Must be 5 digits long'});
+	}
+	if(inputMaxMiles!==''&&inputZipCode===''){
+		ctrlMessages.push({message:'You must provide a zip Code if you are providing miles'});
+	}
+	if(inputMaxMiles===''&&inputZipCode!==''){
+		ctrlMessages.push({message:'You must provide miles  if you are providing a zip Code'});
+	}
+	if(eventTimeSlotsGroupedByDay.length<1){
+		ctrlMessages.push({message:'No events Found please alter your queries or check back latter for new events'});
+	}
+	if(selectedEventsData.error!==undefined){
+		ctrlMessages.push({message:'Issue finding events. Please check if the given zip code is valid or reload the page.'});
+	}
+	if(allEvents.error!==undefined){
+		ctrlMessages.push({message:'Issue finding events. Please reload the page. If you still see this error check api status at https://mobilize.statuspage.io/'});
+	}
+
+	//fix id mess
 	return (<>
 		<ContentBlock kblockid={(props.secid !== undefined && props.secid  !== '') ? props.secid  : null}>
 			<EventsCtrl eventData={allEvents.data} 
@@ -131,6 +154,8 @@ export function Events(props){
 			handleMaxMilesChange={handleMaxMilesChange}
 
 			resetCtrlInputs={resetCtrlInputs}
+
+			ctrlMessages={ctrlMessages}
 			/>
 		</ContentBlock>
 		<EventList eventDataByDay={isServer ? props.eventDataByDay : eventTimeSlotsGroupedByDay}/>
@@ -178,6 +203,14 @@ export function EventsCtrl(props){
 			inputZipCode:props.inputZipCode,
 			inputMaxMiles:props.inputMaxMiles
 		},null,'\t')}</pre> */}
+		{props.ctrlMessages.length>0&&(
+			<div>
+				{props.ctrlMessages.map((el,index)=>{
+					return <div key={index+JSON.stringify(el)}>{el.message}</div>;
+				})}
+			</div>
+		)}
+	
 		</>
 		);
 	
@@ -187,11 +220,11 @@ export function EventList(props){
 
 	// let eventTimeSlotsGroupedByDay=splitTimeslotsIntoDays(splitEventsIntoTimeSlot(props.eventData));
 	let dayArr=props.eventDataByDay.map((day)=>{
-		return <EventDay key={day.uuid} day={day}/>
+		return <EventDay key={'timeslots-'+day.etsArr.map((el)=>{return el.timeslot.id}).join(',')} day={day}/>
 	});
 
 
-return (<>{dayArr}</> );
+	return (<>{dayArr}</> );
 	
 }
 function EventsCalander(props){
