@@ -12,7 +12,7 @@ import {ContentBlock} from '../ContentBlock'
 import unified from 'unified';
 import remarkParse from 'remark-parse';
 import remarkReact from 'remark-react';
-import { CSSTransition } from 'react-transition-group';
+import { CSSTransition, SwitchTransition } from 'react-transition-group';
 
 
 
@@ -261,28 +261,30 @@ function EventsCalander(props){
 			}
 	return (
 		<div className={styles.eventQuickCalander}>
-		
-				{/* <CSSTransition in={!displayCal} unmountOnExit={true} 
-					timeout={500}
-					classNames={{
-						enter:styles.eventQuickCalanderButtonEnter,
-						enterActive:styles.eventQuickCalanderButtonEnterActive,
-						exit:styles.eventQuickCalanderButtonExit,
-						exitActive:styles.eventQuickCalanderButtonExitActive,
+			<SwitchTransition>
+				<CSSTransition key={displayCal}
+					timeout={{
+						enter:300,
+						exit:300
 					}}
-				> */}
-
-				{
-					!displayCal&&<button className={styles.eventQuickCalanderButton} onClick={()=>{setDisplayCal(true)}}>Jump to Day...</button>
+					classNames={{
+						enter:styles.eventQuickCalanderOpnCloseEnter,
+						enterActive:styles.eventQuickCalanderOpnCloseEnterActive,
+						exit:styles.eventQuickCalanderOpnCloseExit,
+						exitActive:styles.eventQuickCalanderOpnCloseExitActive,
+					}}
+				>
+				{displayCal
+				?
+					(<EventsMonth key={displayCal} display={displayCal} nextMonthFunction={nextMonth} previousMonthFunction={previousMonth} closeCalander={closeCalander} days={days.filter((day)=>{
+							return day.month===month&&day.year===year;
+					})} month={month} year={year}/>)
+				:
+					(<button key={displayCal} className={styles.eventQuickCalanderButton} onClick={()=>{setDisplayCal(true)}}>Jump to Day...</button>)
 				}
-				
-				
-				{/* </CSSTransition> */}
 			
-			<EventsMonth  display={displayCal} nextMonthFunction={nextMonth} previousMonthFunction={previousMonth} closeCalander={closeCalander} days={days.filter((day)=>{
-				return day.month===month&&day.year===year;
-			})} month={month} year={year}/>
-			
+				</CSSTransition>
+			</SwitchTransition>
 		</div>
 	);
 }
@@ -339,14 +341,7 @@ function EventsMonth(props){
 	});
 
 	return (<>
-		<CSSTransition in={props.display} unmountOnExit={true} timeout={500}
-			classNames={{
-				enter:styles.eventQuickMonthBlockEnter,
-				enterActive:styles.eventQuickMonthBlockEnterActive,
-				exit:styles.eventQuickMonthBlockExit,
-				exitActive:styles.eventQuickMonthBlockExitActive,
-			}}
-		>
+		
 
 		
 		<div className={styles.eventQuickMonthBlock}>
@@ -354,7 +349,9 @@ function EventsMonth(props){
 		<button className={styles.eventQuickMonthCloseButton} onClick={props.closeCalander}>Close Calender</button>
 		<div className={styles.eventQuickMonthTitle}>{monthNameArr[props.month]} {props.year}</div>
 		{/* <pre>{JSON.stringify(weeks,null,'\t')}</pre> */}
-			<table className={styles.eventQuickMonth}>
+			<table className={styles.eventQuickMonth} onPointerLeave={()=>{
+										setCurrentDay(null);
+									}}>
 				<thead>
 					<tr>
 						<td>Sun</td>
@@ -444,7 +441,7 @@ function EventsMonth(props){
 				</div>
 			
 			}
-	</div></CSSTransition>
+	</div>
 	</>);
 
 }
