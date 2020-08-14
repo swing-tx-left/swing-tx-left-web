@@ -12,6 +12,7 @@ import {ContentBlock} from '../ContentBlock'
 import unified from 'unified';
 import remarkParse from 'remark-parse';
 import remarkReact from 'remark-react';
+import { CSSTransition } from 'react-transition-group';
 
 
 
@@ -190,11 +191,12 @@ export function EventsCtrl(props){
 			{eventTypeCheckBoxes}
 		</form>
 		<form>
-			<label>Virtual<input type="checkbox" checked={props.selectedVirtual} onChange={props.handelEventVirtualChange}  /></label>
-			<label>Public<input type="checkbox" checked={props.selectedPublic} onChange={props.handelEventPublicChange}/></label>
+			<label><input type="checkbox" checked={props.selectedVirtual} onChange={props.handelEventVirtualChange}  />Virtual</label>
+			<label><input type="checkbox" checked={props.selectedPublic} onChange={props.handelEventPublicChange}/>Public</label>
 		</form>
 		<form>
 			<label>Zipcode<input type="text" value={props.inputZipCode} onChange={(ev)=>{props.handleZipCodeChange(ev.currentTarget.value)}}/></label>
+			<br/>
 			<label>Max Miles<input type="number" value={props.inputMaxMiles} onChange={(ev)=>{props.handleMaxMilesChange(ev.currentTarget.value)}}/></label>
 		</form>
 		<button onClick={props.resetCtrlInputs}>Reset All</button>
@@ -254,21 +256,32 @@ function EventsCalander(props){
 					setMonth(month+1);
 				}
 			}
+			let closeCalander=()=>{
+				setDisplayCal(false)
+			}
 	return (
 		<div className={styles.eventQuickCalander}>
-			{
-				displayCal ? <button className={styles.eventQuickCalanderButton} onClick={()=>{setDisplayCal(false)}}>Hide Calander</button>:<button className={styles.eventQuickCalanderButton} onClick={()=>{setDisplayCal(true)}}>Jump to Day...</button>
-			}
-			{displayCal&&(<>
+		
+				{/* <CSSTransition in={!displayCal} unmountOnExit={true} 
+					timeout={500}
+					classNames={{
+						enter:styles.eventQuickCalanderButtonEnter,
+						enterActive:styles.eventQuickCalanderButtonEnterActive,
+						exit:styles.eventQuickCalanderButtonExit,
+						exitActive:styles.eventQuickCalanderButtonExitActive,
+					}}
+				> */}
+
+				{
+					!displayCal&&<button className={styles.eventQuickCalanderButton} onClick={()=>{setDisplayCal(true)}}>Jump to Day...</button>
+				}
+				
+				
+				{/* </CSSTransition> */}
 			
-		
-		
-			{/* <button onClick={pastMonth}>Month-</button>
-			<button onClick={nextMonth}>Month+</button>	 */}
-			<EventsMonth nextMonthFunction={nextMonth} previousMonthFunction={previousMonth}  days={days.filter((day)=>{
+			<EventsMonth  display={displayCal} nextMonthFunction={nextMonth} previousMonthFunction={previousMonth} closeCalander={closeCalander} days={days.filter((day)=>{
 				return day.month===month&&day.year===year;
 			})} month={month} year={year}/>
-			</>)}
 			
 		</div>
 	);
@@ -326,9 +339,19 @@ function EventsMonth(props){
 	});
 
 	return (<>
+		<CSSTransition in={props.display} unmountOnExit={true} timeout={500}
+			classNames={{
+				enter:styles.eventQuickMonthBlockEnter,
+				enterActive:styles.eventQuickMonthBlockEnterActive,
+				exit:styles.eventQuickMonthBlockExit,
+				exitActive:styles.eventQuickMonthBlockExitActive,
+			}}
+		>
+
+		
 		<div className={styles.eventQuickMonthBlock}>
 			
-	
+		<button className={styles.eventQuickMonthCloseButton} onClick={props.closeCalander}>Close Calender</button>
 		<div className={styles.eventQuickMonthTitle}>{monthNameArr[props.month]} {props.year}</div>
 		{/* <pre>{JSON.stringify(weeks,null,'\t')}</pre> */}
 			<table className={styles.eventQuickMonth}>
@@ -421,7 +444,7 @@ function EventsMonth(props){
 				</div>
 			
 			}
-	</div>
+	</div></CSSTransition>
 	</>);
 
 }

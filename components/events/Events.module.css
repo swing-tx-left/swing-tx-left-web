@@ -117,6 +117,31 @@ details[open] .eventAdditionalTimes::before{
 	margin-top: 2rem;
 	display: block;
 }
+.eventQuickCalanderButtonEnter{
+	transform:translateX(-100vw);
+}
+.eventQuickCalanderButtonEnterActive{
+	transform:translateX(0);
+	transition: transform 500ms;
+}
+
+.eventQuickCalanderButtonExit{
+	transform:translateY(0);
+	
+}
+
+.eventQuickCalanderButtonExitActive{
+	transform:translateY(100vh);
+	transition: transform 500ms;
+}
+
+.eventQuickMonthCloseButton{
+	width: 100%;
+	font-size: 1rem;
+	background-color: var(--logo-pink);
+	padding: 1rem;
+}
+
 
 .eventQuickMonthButtonRow{
 	display: grid;
@@ -145,6 +170,24 @@ details[open] .eventAdditionalTimes::before{
 	margin-left:2rem;
 	background-color: rgb(38, 186, 231);
 }
+
+.eventQuickMonthBlockEnter{
+	transform:translateX(-100vw);
+}
+.eventQuickMonthBlockEnterActive{
+	transform:translateX(0);
+	transition: transform 500ms;
+	/* transition-delay: 600ms; */
+}
+.eventQuickMonthBlockExit{
+	transform:translateX(0);
+}
+.eventQuickMonthBlockExitActive{
+	transform:translateX(-100vw);
+	transition: transform 500ms;
+}
+
+
 .eventQuickMonth{
 	
 	
