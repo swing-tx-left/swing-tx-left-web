@@ -35,8 +35,9 @@
 	margin: 0;
 }
 .buttonRow{
-	text-align: center;
+	display:flex;
 	/* border-radius: 2rem; */
+	justify-content: center;
 	margin:2vmin 0 2vmin auto;
 	/* max-width:40rem; */
 	/* padding:2rem; */
@@ -63,4 +64,13 @@
 	transition: color 1s, border-color 1s;
 	margin:0 2.5vmin;
 	display:inline-block;
+}
+.mainImagebutton:hover{
+	text-decoration: none;
+	border-color: var(--logo-blue);
+	color: var(--logo-blue);
+}
+.mainImageButtonPopUpContent{
+	overflow: auto;
+	height: 100%;
 }

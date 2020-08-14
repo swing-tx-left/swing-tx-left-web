@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import styles from './Header.module.css'
 import {useRef, useEffect, useState} from 'react'
-
+import {CSSTransition} from 'react-transition-group';
 
 export default function Header(props){
 	let headerEl=useRef(null);
@@ -32,9 +32,12 @@ export default function Header(props){
 		}
 	};
 
-
+	let headerClasses=[styles.mainHeader];
+	if(hamburgerMode){
+		headerClasses.push(styles.mainHeaderHamMode);
+	}
 	return (
-		<header  ref={headerEl} className={styles.mainHeader}>
+		<header  ref={headerEl} className={headerClasses.join(' ')}>
 			<Link href="[[...pageid]]" as={props.homepage}>
 			<a>
 					<img className={styles.siteLogo} src={props.logo}/>
@@ -43,8 +46,8 @@ export default function Header(props){
 			{hamburgerMode&&
 				(<button aria-label="navigation menu" className={styles.hamburgerButton} onClick={()=>{setShowHamburger(!showHamburger)}}></button>)
 			}
-			{hamburgerMode&&showHamburger&&
-				(<HeaderHamburgerNav nav={props.nav} closeHamNav={()=>{setShowHamburger(false)}}/>)
+			{hamburgerMode&&
+				(<HeaderHamburgerNav display={showHamburger} nav={props.nav} closeHamNav={()=>{setShowHamburger(false)}}/>)
 			}
 			<HeaderNavBar nav={props.nav}/>
 		</header>
@@ -60,9 +63,28 @@ function HeaderHamburgerNav(props){
 
 
 	return (
-		<nav className={styles.hamNav}><ul>
-			{navArr}
+		<>
+		<CSSTransition in={props.display} unmountOnExit={true}  timeout={{enter:500,exit:500}} classNames={{
+			enter:styles.hamNavBackDropEnter,
+			enterActive:styles.hamNavBackDropEnterActive,
+			exit:styles.hamNavBackDropExit,
+			exitAfter:styles.hamNavBackDropExitActive
+		}}>
+			<button className={styles.hamNavBackDrop} onClick={props.closeHamNav}></button>
+		</CSSTransition>
+		<CSSTransition in={props.display} unmountOnExit={true}  timeout={{enter:1000,exit:500}} classNames={{
+			enter:styles.hamNavEnter,
+			exit:styles.hamNavExit,
+			// exitAfter:styles.hamNavExitAfter,
+		}}>
+			
+		<nav className={styles.hamNav}>
+			<ul>
+				{navArr}
+				<li><button className={styles.hamNavBarExitButton} onClick={props.closeHamNav}>Close</button></li>			
 		</ul></nav>
+		</CSSTransition>
+		</>
 	)
 }
 

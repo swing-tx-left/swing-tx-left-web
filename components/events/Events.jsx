@@ -9,7 +9,9 @@ import styles from './Events.module.css'
 
 import {ContentBlock} from '../ContentBlock'
 
-
+import unified from 'unified';
+import remarkParse from 'remark-parse';
+import remarkReact from 'remark-react';
 
 
 
@@ -138,7 +140,7 @@ export function Events(props){
 
 	//fix id mess
 	return (<>
-		<ContentBlock kblockid={(props.secid !== undefined && props.secid  !== '') ? props.secid  : null}>
+		<ContentBlock blockid={(props.secid !== undefined && props.secid  !== '') ? props.secid  : null}>
 			<EventsCtrl eventData={allEvents.data} 
 			selectedEventTypes={selectedEventTypes} 
 			handleEventTypeChange={handleEventTypeChange}
@@ -473,10 +475,10 @@ export function EventTimeSlot(props){
 	let startDate=new Date(props.eventTimeSlot.timeslot.start_date*1000);
 	let endDate=new Date(props.eventTimeSlot.timeslot.end_date*1000)
 
-	return (<div>
-			<h3>{event.title}</h3>
-			<div>
-			{event.is_virtual && (<span>Virtual</span>)} {humanizeEventType(event.event_type)}
+	return (<div className={styles.event}>
+			<h3 className={styles.eventTitle}>{event.title}</h3>
+			<div className={styles.eventTypeBox}>
+			{event.is_virtual && (<span className={styles.eventTypeBoxVirtual}>Virtual</span>)} {humanizeEventType(event.event_type)}
 			</div>
 			<EventField field="Starts">{dateFormater.format(startDate)}</EventField>
 			<EventField field="Ends">{dateFormater.format(endDate)}</EventField>
@@ -488,7 +490,7 @@ export function EventTimeSlot(props){
 
 
 			<EventDescription content={event.description}/>
-			<button onClick={()=>{setSignup(!signup)}}>Sign Up</button>
+			<button className={styles.eventButtonMobilizeSignUp} onClick={()=>{setSignup(!signup)}}>Sign Up</button>
 			<PopUpOverlay closeFunction={()=>{setSignup(false)}} display={signup}>
 				 <iframe style={{width:'100%',height:'100%',border:0}} src={event.browser_url}/>
 			</PopUpOverlay>
@@ -533,8 +535,8 @@ function OtherTimeslots(props){
 		return <li key={t.start_date+' '+t.end_date}>{dateFormater.format(t.start_date*1000)}</li>
 	});
 	return (
-			<details>
-				<summary>Additional Times</summary>
+			<details >
+				<summary className={styles.eventAdditionalTimes}>Additional Times</summary>
 				<ul>{listItems}</ul>
 			</details>
 	);
@@ -567,14 +569,35 @@ function EventLocation(props){
 
 				</>)}	
 
-
-
-
 	</>);
 }
 
 function EventDescription(props){
-	return <div>{props.content}</div>
+	
+
+	let shownContent='';
+	let shouldHide=props.content.split('\n\n').length>2
+	const [canSeeMore,setCanSeeMore]=useState(shouldHide);
+	if(shouldHide&&canSeeMore){
+		shownContent=props.content.split('\n\n').slice(0,2).join('\n\n');
+	}
+	else{
+		shownContent=props.content;
+	}
+	let markdown=unified()
+	.use(remarkParse,{gfm:true})
+	.use(remarkReact)
+	.processSync(shownContent).result
+
+	return (<div>
+		{markdown}
+		{ canSeeMore&&
+			(<button onClick={()=>{setCanSeeMore(false)}}>Click to Show More</button>)
+		}
+		{!canSeeMore&&shouldHide&&
+			(<button onClick={()=>{setCanSeeMore(true)}}>Click to Show Less</button>)
+		}
+		</div>);
 }
 
 function EventField(props){

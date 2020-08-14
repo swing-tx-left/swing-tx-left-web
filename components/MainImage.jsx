@@ -54,8 +54,7 @@ function MainButtonRow(props) {
 			return <MainButtonLink key={index} {...el} />
 		}
 	});
-
-	return (<div className={styles.buttonRow} style={{ textAlign: props.row.alignment }}>{buttons}</div>);
+	return (<div className={styles.buttonRow} style={{ justifyContent: props.row.alignment }}>{buttons}</div>);
 }
 
 function MainButtonLink(props) {
@@ -68,7 +67,7 @@ function MainButtonPopup(props) {
 	return (<><button className={styles.mainImagebutton} onClick={()=>{setPopUp(!popup)}}>{props.text}</button>
 	 
 		
-				<PopUpOverlay display={popup} closeFunction={()=>{setPopUp(false)}}>{htmlToReact(props.content)}</PopUpOverlay>
+				<PopUpOverlay display={popup} closeFunction={()=>{setPopUp(false)}}><div className={styles.mainImageButtonPopUpContent}>{htmlToReact(props.content)}</div></PopUpOverlay>
 		
 	
 		</>);

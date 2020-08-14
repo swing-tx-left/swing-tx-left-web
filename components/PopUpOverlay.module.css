@@ -1,10 +1,19 @@
 .popupBackDrop{
-	position:fixed;
+	/* position:fixed;
 	top:0;
 	left:0;
 	width:100vw;
 	height:100vh;
-	background-color: rgba(0,0,0,0.5);
+	background-color: rgba(0,0,0,0.5); */
+
+	top:0;
+	left:0;
+	position:fixed;
+	width:100%;
+	height:100%;
+	background-color:rgba(var(--site-white-red),var(--site-white-green),var(--site-white-blue),0.5);;
+	backdrop-filter: blur(1rem);
+	z-index:900000000;
 }
 
 .popupBackDropEnter{
@@ -29,14 +38,27 @@
 }
 
 .popup{
-	position:fixed;
+	/* position:fixed;
 	top:25vh;
 	left:25vw;
 	width:50vw;
 	height:50vh;
-	background-color: lawngreen;
+	background-color: lawngreen; */
+	z-index:900000001;
+	border-width: 0;
+	top:0;
+	/* left:3rem; */
+	left:0;
+	position:fixed;
+	/* width:calc(100vw - 6rem); */
+	width:100vw;
+	/* height:calc(90vh - 6rem); */
+	height: calc(100vh - 2rem);
+	height:100%;
+	background-color: rgb(255,255,255);
 	transition:top 0.3s,left 0.3s, width 0.3s,height 0.3s;
 	transform-origin: 50% 50%;
+	overflow: none;
 }
 .popupMax{
 	top:0;
@@ -45,18 +67,17 @@
 	height:90vh;
 }
 .popupContent{
-	height:100%;
+	height:calc( 100% - 3.5rem);
 }
 
 
 .popupEnter{
-	filter:blur(1vmax);
-	transform:translateX(-100vmax) scale(0.0001) ;
+	
+	transform:translateY(-100vh) scale(0) ;
 }
 
 .popupEnterActive{
-	transform: translateX(0)  scale(1);
-	filter:blur(0vmin);
+	transform: translateY(0)  scale(1);
 	transition:transform 500ms linear,filter 500ms linear ;
 }
 .popupExit{
@@ -66,7 +87,7 @@
 }
 
 .popupExitActive{
-	transform:translateY(100vmax)  scale(0);
+	transform:translateY(100vh)  scale(0);
 	
 	transition:transform 500ms;
 }
@@ -78,8 +99,12 @@
 	background-color: black;
 }
 .close{
-	background-color: red;
+	background-color:var(--logo-pink);
 	color:white;
+	font-size: 1.5rem;
+	border-width: 0;
+	width: 100%;
+	padding: 1rem;
 }
 .max{
 	background-color: blue;
