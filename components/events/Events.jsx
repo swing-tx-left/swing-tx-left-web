@@ -2,7 +2,7 @@ import useSWR from 'swr';
 import PopUpOverlay from '../PopUpOverlay';
 
 import {getSwingLeftEvents,splitEventsIntoTimeSlot,humanizeEventType,splitTimeslotsIntoDays} from '../../lib/util';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {v4 as uuidv4} from 'uuid';
 import styles from './Events.module.css'
 //function event
@@ -349,9 +349,17 @@ function EventsMonth(props){
 		<button className={styles.eventQuickMonthCloseButton} onClick={props.closeCalander}>Close Calender</button>
 		<div className={styles.eventQuickMonthTitle}>{monthNameArr[props.month]} {props.year}</div>
 		{/* <pre>{JSON.stringify(weeks,null,'\t')}</pre> */}
-			<table className={styles.eventQuickMonth} onPointerLeave={()=>{
-										setCurrentDay(null);
-									}}>
+				<SwitchTransition>
+				<CSSTransition key={props.month+'-'+props.year}
+					timeout={300}
+					classNames={{
+						enter:styles.eventQuickMonthEnter,
+						enterActive:styles.eventQuickMonthEnterActive,
+						exit:styles.eventQuickMonthExit,
+						exitActive:styles.eventQuickMonthExitActive,
+					}}
+				>	
+				<table key={props.month+'-'+props.year} className={styles.eventQuickMonth} >
 				<thead>
 					<tr>
 						<td>Sun</td>
@@ -363,6 +371,9 @@ function EventsMonth(props){
 						<td>Sat</td>
 					</tr>
 				</thead>
+			
+
+				
 				<tbody>
 					{weeks.map((week)=>{
 						return(	
@@ -382,7 +393,7 @@ function EventsMonth(props){
 									return <td key={day.uuid} onPointerEnter={(e)=>{
 										if(e.pointerType==='mouse'||e.pointerType==='pen'){
 											setCurrentDay({
-												x:e.currentTarget.getBoundingClientRect().x,
+												x:document.getElementsByTagName('html')[0].clientWidth-e.currentTarget.getBoundingClientRect().right,
 												y:window.innerHeight-e.currentTarget.getBoundingClientRect().y,
 												hoverText:hoverText,
 												day:day
@@ -413,7 +424,9 @@ function EventsMonth(props){
 					})}
 				
 				</tbody>
-			</table>	
+			</table>
+			</CSSTransition>
+			</SwitchTransition>	
 			<div  className={styles.eventQuickMonthButtonRow}>
 
 
@@ -434,7 +447,7 @@ function EventsMonth(props){
 	
 			{currentDay!==null&&
 			
-				<div style={{bottom:currentDay.y,left:currentDay.x}} className={styles.dayPreview}>
+				<div style={{bottom:currentDay.y,right:currentDay.x}} className={styles.dayPreview}>
 					<div className={styles.dayPreviewDay}> {currentDay.day.date.getDate()}
 					</div>
 					{currentDay.hoverText}
@@ -451,9 +464,36 @@ export function EventDay(props){
 
 	let timeslots=props.day.etsArr.map((el)=>{
 		return <EventTimeSlot key={el.timeslot.id} eventTimeSlot={el}/> 
-	})
+	});
+	const dayTitle=useRef(null);
+
+	const [showBig,setShowBig]=useState(true);
+
+	useEffect(()=>{
+		let observer=new IntersectionObserver((ent)=>{
+			for(let entry of ent){
+				if(entry.isIntersecting){
+					setShowBig(false);
+				}
+				else{
+					setShowBig(true);
+				}
+			}
+		},{rootMargin:'0px 0px -99% 0px',threshold:[0]});
+		observer.observe(dayTitle.current);
+
+		return ()=>{
+			observer.unobserve(dayTitle.current);
+			observer.disconnect();
+		}
+	});
+	let bigDayClasses=[styles.eventBigDay]
+	if(!showBig){
+		bigDayClasses.push(styles.shrunkBigDay);
+	}
+
 	return (<ContentBlock blockid={'eventday-'+props.day.month+'-'+props.day.day+'-'+props.day.year}>
-		<h2>{props.day.dayStr}</h2>{timeslots}
+		<h2 ref={dayTitle} className={bigDayClasses.join(' ')}>{props.day.dayStr}</h2>{timeslots}
 		</ContentBlock>)
 }
 

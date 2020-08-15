@@ -1,3 +1,23 @@
+.eventBigDay{
+	position: sticky; 
+	top:0rem;
+	margin:0rem auto 2rem auto;
+	padding: 0.3rem;
+	background-color: var(--logo-pink);
+	width: max-content; 
+	color: var(--logo-pink);
+	color: var(--light-blue);
+	color:var(--site-black);
+	font-size: 1.2rem;
+	font-weight: normal;
+	box-shadow: 0rem 0rem 0rem 0.7rem var(--logo-pink),0.5rem 0.5rem 0rem 0.7rem var(--site-black), 1rem 1rem 0rem 0.7rem var(--logo-blue);
+	transition:box-shadow 1s;
+}
+.shrunkBigDay{
+	box-shadow: 0rem 0rem 0rem 0rem var(--logo-pink),0.1rem 0.1rem 0rem 0rem var(--site-black), 0.2rem 0.2rem 0rem 0rem var(--logo-blue);
+
+}
+
 .event{
 	padding: 2rem;
 	display:block;
@@ -24,6 +44,8 @@
 	font-size: 1.5rem;
 	text-align: center;
 }
+
+
 
 div>div>.eventTitle{
 	border-color:var(--logo-blue)
@@ -103,7 +125,7 @@ details[open] .eventAdditionalTimes::before{
 	padding: 2rem;  */
 	/* width:max-content; */
 	width:max-content;
-	
+	margin-left:auto;
 	
 }
 
@@ -113,9 +135,10 @@ details[open] .eventAdditionalTimes::before{
 	border-width: 0;
 	font-size: 1rem;
 	padding: 1rem;
-	margin-left: 2rem;
+	margin-right: 2rem;
 	margin-top: 2rem;
 	display: block;
+	box-shadow: 0.3rem 0.3rem 0.3rem 0rem var(--site-black);
 }
 .eventQuickCalanderOpnCloseEnter{
 	transform:translateX(-100vw) translateY(100vh);
@@ -142,6 +165,7 @@ details[open] .eventAdditionalTimes::before{
 	font-size: 1rem;
 	background-color: var(--logo-pink);
 	padding: 1rem;
+	border-width: 0;
 }
 
 
@@ -169,8 +193,9 @@ details[open] .eventAdditionalTimes::before{
 }
 .eventQuickMonthBlock{
 	width: max-content;
-	margin-left:2rem;
+	margin-right:2rem;
 	background-color: rgb(38, 186, 231);
+	box-shadow: 0.3rem 0.3rem 0.3rem 0rem var(--site-black);
 }
 
 
@@ -183,6 +208,21 @@ details[open] .eventAdditionalTimes::before{
 	border-width: 0.05rem;
 	border-color: red; */
 	
+}
+.eventQuickMonthEnter{
+	opacity: 0;
+	
+}
+.eventQuickMonthEnterActive{
+	opacity: 1;
+	transition: opacity 300ms;
+}
+.eventQuickMonthExit{
+	opacity: 1;
+}
+.eventQuickMonthExitActive{
+	opacity: 0;
+	transition: opacity 300ms;
 }
 
 
@@ -219,14 +259,29 @@ details[open] .eventAdditionalTimes::before{
 	/* transform:translateY(calc( -100% - 0.5rem )) ;
 	transform-origin: 100% 100%; */
 	pointer-events: none;
-
+	margin: 0 -2rem 0.3rem 0;
 	padding: 2rem;
 	background-color:rgb(92, 180, 252);
-
+	border-radius: 2rem;
+	/* border-bottom-right-radius: 0; */
 	transition: display 0s, opacity 0.5s;
+	/* box-shadow: 0.3rem 0.3rem 0.3rem 0rem var(--site-black); */
+filter:drop-shadow(0.3rem 0.3rem 0.3rem);
+}
+.dayPreview::after{
+	border-width: 1rem 1rem 0 1rem;
+	border-style: solid;
+	display: block;
+	height:1rem;
+	width: 0;
+	position: absolute;
+	right:2rem;
+	top:100%;
+	content:'';
+	
+	border-color:rgb(92, 180, 252) transparent;
 
 }
-
 
 .dayPreviewDay{
 
