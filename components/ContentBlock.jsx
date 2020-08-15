@@ -15,7 +15,7 @@ export function ContentBlocks(props) {
 
 
 	
-	return <MkBlocks content={props.content} eventDataByDay={props.eventDataByDay}  eventData={props.eventData}/>;
+	return <MkBlocks content={props.content} />;
 }
 
 // function htmlToReact(html){
@@ -37,7 +37,7 @@ export function ContentBlock(props){
 	</div>)
 }
 
-function MkBlocks({content,eventData,eventDataByDay}){
+function MkBlocks({content}){
 	let contentBlockArr = [];
 	//note keys arnt ideal
 	//let index=0;
@@ -53,7 +53,7 @@ function MkBlocks({content,eventData,eventDataByDay}){
 			contentBlockArr.push(
 			
 					
-					<Events key={sec.uuid} secid={(sec.id !== undefined && sec.id !== '') ? sec.id : null} eventData={eventData} eventDataByDay={eventDataByDay}/>
+					<Events key={sec.uuid} secid={(sec.id !== undefined && sec.id !== '') ? sec.id : null} eventData={sec.eventData} eventDataByDay={sec.eventDataByDay}/>
 				)
 		}
 		else if (sec.type === 'sections-with-toc') {
@@ -70,7 +70,7 @@ function MkBlocks({content,eventData,eventDataByDay}){
 
 				</ContentBlock>);
 
-			contentBlockArr.push(<MkBlocks key={sec.uuid} content={sec.sections} eventData={eventData} eventDataByDay={eventDataByDay}/>)
+			contentBlockArr.push(<MkBlocks key={sec.uuid} content={sec.sections} />)
 		}
 		
 	}

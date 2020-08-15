@@ -23,53 +23,62 @@ export function getPages(){
 		if(pageData.content===undefined){
 			pageData.content=[];
 		}
-		pageData.content=giveEachSectionUUID(pageData.content)
+		//pageData.content=await giveEachSectionNeeededData(pageData.content)
 
 		return pageData;
 		
 
 	});
+	
 	//console.log(dataForAllPages);
 	return dataForAllPages;
 }
 
-function giveEachSectionUUID(content){
-	return content.map((sec)=>{
-		let uuidsec={...sec, uuid:uuidv4()};
-		if(uuidsec.type==='sections-with-toc'){
-			uuidsec.sections=giveEachSectionUUID(uuidsec.sections);
+async function giveEachSectionNeeededData(content){
+	return await Promise.all(content.map(async (sec)=>{
+		let dataAddedSec={...sec, uuid:uuidv4()};
+		if(dataAddedSec.type==='sections-with-toc'){
+			dataAddedSec.sections=await giveEachSectionNeeededData(dataAddedSec.sections);
 		}
-		return uuidsec;
-	});
+		if(dataAddedSec.type==='events'){
+			let swtxlevents= await getSwingLeftEvents('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now');
+			let swtxleventsByDay=splitTimeslotsIntoDays(splitEventsIntoTimeSlot(swtxlevents));
+			dataAddedSec={...dataAddedSec, eventData: swtxlevents,eventDataByDay:swtxleventsByDay};
+		}
+
+		return dataAddedSec;
+	}));
 }
 
 //const eventdata= getData('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now');
 export async function getProps(context){
-	let pageData=getPages();
+	let pageData=await getPages();
 	let siteData=getSiteSettings();
-	let swtxlevents= await getSwingLeftEvents('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now');
-	let swtxleventsByDay=splitTimeslotsIntoDays(splitEventsIntoTimeSlot(swtxlevents));
+	//let swtxlevents= await getSwingLeftEvents('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now');
+	//let swtxleventsByDay=splitTimeslotsIntoDays(splitEventsIntoTimeSlot(swtxlevents));
 	//let swtxlevents=await eventdata;
+	let page=pageData.find((el)=>{
+			if(context.params.pageid===undefined){
+				return el.slug===siteData.home
+			}
+			else{
+				return el.slug===context.params.pageid.join('/');
+			}
+		});
+
+	page.content=await giveEachSectionNeeededData(page.content);
 	return {
 		props:{
 			siteData:siteData,
-			pageData:pageData.find((el)=>{
-					if(context.params.pageid===undefined){
-						return el.slug===siteData.home
-					}
-					else{
-						return el.slug===context.params.pageid.join('/');
-					}
-				 
-				}),
-			eventData:swtxlevents,
-			eventDataByDay:swtxleventsByDay
+			pageData:page
+			//eventData:swtxlevents,
+			//eventDataByDay:swtxleventsByDay
 		}
 		
 	}
 }
 
-export function getPaths(){
+export async function getPaths(){
 	let pages = getPages();
 	return {
 		paths: pages.map((el) => {
