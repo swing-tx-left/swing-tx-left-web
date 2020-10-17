@@ -58,7 +58,11 @@ function HeaderHamburgerNav(props){
 	//investigate if can re use HeaderMainNavBar
 	let navArr=[]
 	for( let i of props.nav){
-		navArr.push(<li key={i.page+'----$-----'+i.text}><Link href="[[...pageid]]" as={'/'+i.page}><a onClick={props.closeHamNav} className={styles.navBarLink}>{i.text}</a></Link></li>)
+		let linktext='/'+i.page;
+		if(i.id!==''&&i.id!==undefined){
+			linktext=linktext+'#'+i.id;
+		}
+		navArr.push(<li key={i.page+'----$-----'+i.text}><Link href={linktext}><a onClick={props.closeHamNav} className={styles.navBarLink}>{i.text}</a></Link></li>)
 	}
 
 

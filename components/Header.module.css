@@ -58,7 +58,7 @@
 	border-width: 0;
 	outline: none;
 	backdrop-filter: blur(5vmin);
-	
+	z-index:900000002;
 	background-color: rgba(var(--site-white-red),var(--site-white-green),var(--site-white-blue),0.3);
 	/* background-color: var(--logo-blue); */
 	height: 100vh;
@@ -91,6 +91,7 @@
 	max-height:calc(94vh - 2rem - 6vmin);
 	overflow-y:auto;
 	box-shadow: 2vmin 2vmin 0rem 0 var(--logo-blue), -2vmin -2vmin 0rem 0 var(--logo-pink);
+	z-index:900000003;
 }
 .hamNavEnter{
 	
