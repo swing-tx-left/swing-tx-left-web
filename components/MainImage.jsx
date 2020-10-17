@@ -10,10 +10,12 @@ export default function MainImage(props) {
 	}
 
 	if(!props.fullPageImage&&props.image !== undefined){
-		style.minHeight='40vh'
+		style.minHeight='40vh';
+		style.backgroundAttachment='scroll';
 	}
 	else if(!props.fullPageImage){
-		style.minHeight='20vh'
+		style.minHeight='20vh';
+		
 	}
 
 	return (<div className={styles.mainImage} style={style}>
