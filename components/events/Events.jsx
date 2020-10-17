@@ -645,7 +645,7 @@ function EventDescription(props){
 		shownContent=props.content;
 	}
 	let markdown=unified()
-	.use(remarkParse,{gfm:true})
+	.use(remarkParse)
 	.use(remarkReact)
 	.processSync(shownContent).result
 
