@@ -1,14 +1,12 @@
-title: Home
+title: Events
 slug: home
-mainImage: /files/swing_tx_left_720final-e1564565077506.png
+mainImage: /files/stxl-main-page-rev-2.jpg
 mainImageFullPage: true
 content:
-  - type: normal-section
-    header: Home
-    content: <p>This is the home page</p>
   - type: events
     header: Events
     id: events
+    showHeader: false
 mainButtons:
   - alignment: right
     buttons:

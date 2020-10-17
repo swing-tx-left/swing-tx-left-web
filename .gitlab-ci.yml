@@ -10,6 +10,7 @@ pages:
     - rm -rf public
     - mkdir -p public
     - cp -r out/* public
+  interruptible: true
   artifacts:
     paths:
       - public

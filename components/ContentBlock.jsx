@@ -37,6 +37,9 @@ export function ContentBlock(props){
 	</div>)
 }
 
+function SectionHeader(props){
+	return <h2>{props.children}</h2>
+}
 function MkBlocks({content}){
 	let contentBlockArr = [];
 	//note keys arnt ideal
@@ -45,7 +48,7 @@ function MkBlocks({content}){
 		if (sec.type === 'normal-section') {
 			contentBlockArr.push(
 				<ContentBlock  key={sec.uuid} blockid={(sec.id !== undefined && sec.id !== '') ? sec.id : null}>
-					<h1>{sec.header}</h1>
+					{sec.showHeader&&(<SectionHeader>{sec.header}</SectionHeader>)}
 					{htmlToReact(sec.content)}
 				</ContentBlock>)
 		}
@@ -63,7 +66,10 @@ function MkBlocks({content}){
 
 			contentBlockArr.push(
 
-				<ContentBlock key={'table-of-contents-'+sec.uuid}>
+				<ContentBlock key={'table-of-contents-'+sec.uuid}  blockid={(sec.id !== undefined && sec.id !== '') ? sec.id : null}>
+					{sec.showHeader&&(<SectionHeader>{sec.header}</SectionHeader>)}
+					{htmlToReact(sec.content)}
+
 					<ul>
 						{toc}
 					</ul>

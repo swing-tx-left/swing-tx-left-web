@@ -2,9 +2,120 @@ title: "Voting and Election Resources "
 slug: voting-and-election-resources
 mainImageFullPage: false
 content:
-  - type: normal-section
+  - type: sections-with-toc
+    sections:
+      - type: normal-section
+        header: Register to Vote
+        content: >-
+          <p>If you are not yet registered to vote, you are eligible to register
+          if:</p>
+
+          <ul>
+
+          <li>You are a United States citizen;</li>
+
+          <li>You are a resident of the county where you submit the application;</li>
+
+          <li>You are at least 17 years and 10 months old</li>
+
+          <li>You&rsquo;re a convicted felon and COMPLETED your sentence, probation or parole (OFF PAPER) you CAN vote</li>
+
+          <li>You have not been declared by a court exercising probate jurisdiction to be either totally mentally incapacitated or partially mentally incapacitated without the right to vote.</li>
+
+          </ul>
+
+          <p>To register, find a volunteer deputy voter registrar (ask us!) or obtain an <a href="https://www.texasdemocrats.org/are-you-registered-to-vote/" target="_blank" rel="noopener">application online</a>. (you must complete, sign, and send back the application to become registered).</p>
+        id: RegistertoVote
+        showHeader: true
+      - type: normal-section
+        showHeader: true
+        header: Registered Voters
+        id: RegisteredVoters
+        content: >-
+          <p>For Harris County residents:</p>
+
+          <ul>
+
+          <li>Check your voter registration status <a href="https://www.hctax.net/Voter/Search" target="_blank" rel="noopener">here </a></li>
+
+          <li>Find out who represents you <a href="https://www.house.texas.gov/members/find-your-representative/" target="_blank" rel="noopener">here </a></li>
+
+          <li>Map of Harris County Precinct Chairs <a href="https://www.januaryadvisors.com/map-of-harris-county-precinct-chairs/" target="_blank" rel="noopener">here </a></li>
+
+          </ul>
+
+          <p>For Harris County and residents of other counties:</p>
+
+          <ul>
+
+          <li>Check your voter registration status, current address, and precinct number <a href="https://teamrv-mvp.sos.texas.gov/MVP/mvp.do" target="_blank" rel="noopener">Here </a></li>
+
+          <li>If you need to UPDATE your address within the SAME COUNTY, you can update it <a href="https://txapps.texas.gov/tolapp/sos/SOSACManager" target="_blank" rel="noopener">Here</a>. You will need either Driver&rsquo;s License or ID Card, Social Security Number, or Voter Registration Card VUID (Voter Unique Identifier). You can get your VUID <a href="https://teamrv-mvp.sos.texas.gov/MVP/mvp.do" target="_blank" rel="noopener">Here</a>.</li>
+
+          <li>If you need to UPDATE your address in a DIFFERENT COUNTY, you must complete a new voter registration application. You can obtain one from a Deputy Voter Registrar or request an application from RegisterTexas.com (You must complete and sign the application you receive in the mail and send it back &ndash; postage paid &ndash; in order to be registered.)</li>
+
+          </ul>
+      - type: normal-section
+        showHeader: true
+        header: Election Information
+        content: >-
+          <p>Find out about election dates (including early voting) and polling
+          locations here:<a
+          href="https://harris-votes-polling-map.herokuapp.com/" target="_blank"
+          rel="noopener"> HARRIS COUNTY POLL FINDER MAP</a></p>
+
+          <p>If you&rsquo;ve never voted before or it&rsquo;s been a while since you last voted, you can watch a short 4-minute video on how to vote here -&gt; (<a href="https://www.youtube.com/watch?v=yiSr9iH9dwY&amp;list=PLz2b_fvhR9zlVG507221tmmbfiZu2lTl-" target="_blank" rel="noopener">How to Vote on the eSlate Voting Machine</a>).</p>
+
+          <p>Here&rsquo;s more information about the voting equipment you&rsquo;ll be using to vote. Click <a href="https://www.harrisvotes.com/VotingInfo?lang=en-US#Equipment" target="_blank" rel="noopener">HERE</a>, then select &ldquo;eSlate video&rdquo;.</p>
+
+          <p>Election Day Tips</p>
+
+          <ul>
+
+          <li>Remember no cell phone/electronic devices are allowed within 100 feet of the polling site. So, bring a printed or handwritten list of candidates and propositions.</li>
+
+          <li>Do not wear clothing/buttons mentioning candidates or issues.</li>
+
+          <li>For a complete article about what NOT to do on Election Day in Texas, click <a href="https://www.texasmonthly.com/the-daily-post/not-election-day-texas/" target="_blank" rel="noopener">Here</a>.</li>
+
+          </ul>
+        id: ElectionInformation
+      - type: normal-section
+        showHeader: true
+        header: Ballot By Mail Information
+        content: >-
+          <p>You are eligible to vote by mail if you are:</p>
+
+          <ul>
+
+          <li>65 or over on Election Day</li>
+
+          <li>sick or disabled</li>
+
+          <li>out of your county of residence during early voting and Election Day (college, vacation, business, etc), or</li>
+
+          <li>in jail but otherwise eligible to vote</li>
+
+          </ul>
+
+          <p>If you are eligible and want to obtain a ballot by mail, you must apply annually (if 65+ or disabled) or for EACH election (if out of town for school, business, vacation, etc.) To receive an APPLICATION to vote by mail in Harris County, download the application <a href="http://harrisvotes.com/Docs/app4BallotByMail.pdf?lang=en-US" target="_blank" rel="noopener">Here</a> and then complete, sign, and return the application before the deadline.</p>
+
+          <p>If you are a military voter,<a href="http://www.votetexas.gov/military-overseas-voters/" target="_blank" rel="noopener"> click here for everything you need to know</a>.</p>
+        id: BallotByMailInformation
+      - type: normal-section
+        showHeader: true
+        header: Volunteer Deputy Voter Registrars
+        id: VolunteerDeputyVoterRegistrars
+        content: >-
+          <p>To become a voter registrar, take a <a
+          href="https://www.hctax.net/voter/Deputy/acknowledge.aspx"
+          target="_blank" rel="noopener">1-hour mandatory Harris County training
+          class</a>.</p>
+
+          <p><a href="https://calendar.google.com/calendar/embed?src=0uqlsd0tb5nkk67o9iq6dqns60@group.calendar.google.com&amp;ctz=America/Chicago" target="_blank" rel="noopener">VDVR &ndash; Events/Opportunities</a></p>
     content: <p>If you want to make a change you have to VOTE. That means voting at
       the city/county/state level to make changes that affect ALL Americans.
       Here are some helpful resources regarding:</p>
-    header: Example
+    header: Table
+    showHeader: false
 mainButtons: []

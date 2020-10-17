@@ -32,6 +32,9 @@ collections:
             fields:
               - name: header
                 widget: string
+              - name: showHeader
+                widget: boolean
+                default: true
               - name: id
                 widget: string
                 pattern: ['^[\w]+$','a-z A-Z 0-9 _' ]
@@ -42,12 +45,26 @@ collections:
             fields:
               - name: header
                 widget: string
+              - name: showHeader
+                widget: boolean
+                default: true
               - name: id
                 widget: string
                 pattern: ['^[\w]+$','a-z A-Z 0-9 _' ]
                 required: false
           - name: sections-with-toc
             fields:
+              - name: header
+                widget: string
+              - name: showHeader
+                widget: boolean
+                default: true
+              - name: id
+                widget: string
+                pattern: ['^[\w]+$','a-z A-Z 0-9 _' ]
+                required: false
+              - name: content
+                widget: html
               - name: sections
                 widget: list
                 collapsed: false
@@ -57,6 +74,9 @@ collections:
                       fields:
                         - name: header
                           widget: string
+                        - name: showHeader
+                          widget: boolean
+                          default: true
                         - name: id
                           widget: string
                           pattern: ['^[\w]+$','a-z A-Z 0-9 _' ]
@@ -141,4 +161,21 @@ collections:
                 - "URL: /{{slug}} Title: {{title}}"
             - name: text
               widget: string
+            - name: id
+              widget: string
+              required: false
+        - name: footer
+          widget: list
+          collapsed: false
+          fields:
+            - name: text
+              widget: string
+            - name: url
+              widget: string
+            - name: target
+              label: open in new tab etc
+              widget: select
+              default: _self
+              options: [_self,_blank]
+            
 local_backend: true

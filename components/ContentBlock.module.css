@@ -16,3 +16,21 @@
 	/* --content-block-logo-same:var(--logo-blue);
 	--content-block-logo-op:var(--logo-pink); */
 }
+
+.sec h1,.sec h2,.sec h3,.sec h4,.sec h5,.sec h6{
+	text-align: center;
+	font-family: 'Bungee Shade', cursive;
+	font-family: sans-serif;
+	
+	font-weight: normal;
+}
+
+.sec ul{ 
+	margin: 1rem auto;
+	max-width: 80rem;
+	padding:0rem 3rem;
+}
+
+.sec li{
+	margin: 1rem 3rem;
+}

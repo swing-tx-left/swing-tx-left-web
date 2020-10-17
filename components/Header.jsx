@@ -92,7 +92,11 @@ function HeaderHamburgerNav(props){
 function HeaderNavBar(props){
 	let navArr=[]
 	for( let i of props.nav){
-		navArr.push(<li key={i.page+'----$-----'+i.text}><Link href="[[...pageid]]" as={'/'+i.page}><a className={styles.navBarLink}>{i.text}</a></Link></li>)
+		let linktext='/'+i.page;
+		if(i.id!==''&&i.id!==undefined){
+			linktext=linktext+'#'+i.id;
+		}
+		navArr.push(<li key={i.page+'----$-----'+i.text}><Link href={linktext}><a className={styles.navBarLink}>{i.text}</a></Link></li>)
 	}
 
 

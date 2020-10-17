@@ -1,0 +1,20 @@
+.pageTitleBar{
+	font-size: 1.3rem;
+	font-weight: normal;
+	display:block;
+	color: var(--site-white);
+	/* margin:0 0 1.5rem; */
+	position: relative;
+	margin: 0 0 0rem 0;
+	/* background-color: rgba(var(--site-black-red),var(--site-black-green),var(--site-black-blue),0.9); */
+	background-color: var(--site-black);
+	text-align:center;
+	/* position:absolute; */
+	/* width:100%; */
+	padding:1rem 0;
+	/* bottom:0; */
+	/* color:var(--logo-blue); */
+	/* box-shadow: 0rem calc(3% + 0.5rem) 0rem -3% var(--logo-blue), 0rem calc(5% + 1rem) 0rem -5% var(--logo-pink); */
+	box-shadow: 0rem 1.5rem 0rem -1rem var(--logo-blue), 0rem 2.5rem 0rem -1.5rem var(--logo-pink);
+	/* box-shadow:  0rem 3rem 0rem -2rem var(--logo-pink); */
+}

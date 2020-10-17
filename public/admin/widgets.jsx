@@ -127,7 +127,9 @@ export class HTMLEditor extends React.Component{
 			
 				<Editor value={this.props.value} init={{
 					height:600,
-					plugins:'image anchor table link lists charmap emoticons wordcount fullscreen code',
+					convert_urls:false,
+					plugins:'image anchor table link lists advlists charmap emoticons wordcount fullscreen code' ,
+					toolbar:['undo redo | aligncenter alignjustify alignleft alignnone alignright | bold italic | numlist bullist | indent outdent | removeformat formatselect']
 				}}  outputFormat='html' onEditorChange={this.blah}/>
 
 			

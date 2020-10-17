@@ -1,5 +1,7 @@
 import { getProps, getPaths } from '../lib/libPages'
-import Header from '../components/Header'
+import Header from '../components/Header';
+import PageTitleBar from '../components/PageTitleBar'
+import Footer from '../components/Footer';
 import CSSGlobalVars from '../components/CssVars'
 import {ContentBlocks} from '../components/ContentBlock'
 import MainImage from '../components/MainImage'
@@ -10,6 +12,7 @@ export default function Page(props) {
 	return (
 		<>
 			<Head>
+				<title>{props.pageData.title} - {props.siteData.name}</title>
 				<link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Bungee+Shade&display=swap" rel="stylesheet"/>
 
 				<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
@@ -18,20 +21,13 @@ export default function Page(props) {
 			</Head>
 			<Header logo={props.siteData.logo} homepage={'/' + props.siteData.home} nav={props.siteData.navigationBar} />
 			<MainImage image={props.pageData.mainImage} fullPageImage={props.pageData.mainImageFullPage} buttons={props.pageData.mainButtons} pageMainMessage={props.pageData.pageMainMessage} pageMainMessageShow={props.pageData.pageMainMessageShow}/>
+			<PageTitleBar title={props.pageData.title}/>
 			<main>
 				<ContentBlocks content={props.pageData.content}/>
 			</main>
 		
-
-			<footer>
-				<p>some footer content</p>
-				<p>some footer content</p>
-				<p>some footer content</p>
-				<p>some footer content</p>
-				<p>some footer content</p>
-				<p>some footer content</p>
-				<p>some footer content</p>
-			</footer>
+			<Footer footer={props.siteData.footer}/>
+		
 
 			{/* <details><pre>{JSON.stringify(props, null, '\t')}</pre></details> */}
 			<CSSGlobalVars/>
@@ -44,13 +40,17 @@ export default function Page(props) {
 					margin:0;
 					padding:0;
 					background-color: var(--site-white);
-					display:flex;
+					
 					color: var(--site-black);
+					
+					font-family:sans-serif;min-height:100vh;
+				}
+				#__next{
+					display:flex;
+				
 					flex-direction: column;
 					min-height:100vh;
-					font-family:sans-serif;
 				}
-
 				a{
 					color:var(--link-color);
 					text-decoration: none;
