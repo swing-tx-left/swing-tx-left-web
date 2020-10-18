@@ -58,6 +58,10 @@ export default function Page(props) {
 				a:hover{
 					text-decoration: underline;
 				}
+				summary{
+					list-style: none;
+					outline: none;
+				}
 				summary::-webkit-details-marker{
 					display: none;
 				}

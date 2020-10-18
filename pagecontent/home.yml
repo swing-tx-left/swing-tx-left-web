@@ -21,7 +21,7 @@ mainButtons:
   - alignment: right
     buttons:
       - type: popup
-        text: Newsletter
+        text: Get Our Newsletter!
         content: >-
           <!-- Begin Mailchimp Signup Form -->
 
@@ -102,5 +102,5 @@ mainButtons:
           <!--End mc_embed_signup-->
 
           <p>&nbsp;</p>
-pageMainMessage: '<p>Turn Texas <span style="color: #00eeff;">Blue</span></p>'
+pageMainMessage: '<p>Turn Texas <em><span style="color: var(--logo-blue);">Blue</span></em></p>'
 pageMainMessageShow: true
