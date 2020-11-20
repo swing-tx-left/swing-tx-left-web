@@ -14,10 +14,6 @@ mainButtons:
         newTab: false
         link: "#events"
         text: Volunteer!
-      - type: link
-        newTab: true
-        link: https://secure.actblue.com/donate/swingtxleft
-        text: Donate!
   - alignment: right
     buttons:
       - type: popup

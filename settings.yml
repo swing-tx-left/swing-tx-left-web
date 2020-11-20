@@ -7,7 +7,7 @@ navigationBar:
   - page: about
     text: About
   - page: voting-and-election-resources
-    text: Voting and election Resourses
+    text: Voting and Election Resources
   - page: home
     text: Events
     id: events
