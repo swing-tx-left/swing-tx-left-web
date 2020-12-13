@@ -63,13 +63,14 @@ function MainButtonLink(props) {
 	return (<a href={props.link} className={styles.mainImagebutton} target={props.newTab ? '_blank' : null}>{props.text}</a>);
 }
 function MainButtonPopup(props) {
-	
+	//todo stop using dangerously set inner html
+	// {htmlToReact(props.content)} causes inputs to not be editable
 	const [popup,setPopUp]=useState(false);
 
 	return (<><button className={styles.mainImagebutton} onClick={()=>{setPopUp(!popup)}}>{props.text}</button>
 	 
 		
-				<PopUpOverlay display={popup} closeFunction={()=>{setPopUp(false)}}><div className={styles.mainImageButtonPopUpContent}>{htmlToReact(props.content)}</div></PopUpOverlay>
+				<PopUpOverlay display={popup} closeFunction={()=>{setPopUp(false)}}><div className={styles.mainImageButtonPopUpContent} dangerouslySetInnerHTML={{__html:props.content}}></div></PopUpOverlay>
 		
 	
 		</>);
