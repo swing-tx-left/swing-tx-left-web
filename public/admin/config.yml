@@ -177,5 +177,21 @@ collections:
               widget: select
               default: _self
               options: [_self,_blank]
+        - name: mobilizeOrgs
+          widget: list
+          collapsed: false
+          fields:
+            - name: url
+              widget: string
+            - name: regexp
+              widget: list
+              collapsed: false
+              fields:
+                - name: pattern
+                  widget: string
+                - name: flags
+                  widget: string
+                  required: false
+                  default: ''
             
 local_backend: true

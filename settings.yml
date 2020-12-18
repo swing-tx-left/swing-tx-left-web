@@ -24,3 +24,11 @@ footer:
   - target: _blank
     text: Twitter
     url: https://twitter.com/swingtxleft
+mobilizeOrgs:
+  - regexp:
+      - flags: i
+        pattern: swing\s*tx\s*left
+      - flags: i
+        pattern: STXL
+    url: https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now
+  - url: https://api.mobilize.us/v1/organizations/2441/events?timeslot_end=gte_now

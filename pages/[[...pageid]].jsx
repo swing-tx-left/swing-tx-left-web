@@ -23,7 +23,7 @@ export default function Page(props) {
 			<MainImage image={props.pageData.mainImage} fullPageImage={props.pageData.mainImageFullPage} buttons={props.pageData.mainButtons} pageMainMessage={props.pageData.pageMainMessage} pageMainMessageShow={props.pageData.pageMainMessageShow}/>
 			<PageTitleBar title={props.pageData.title}/>
 			<main>
-				<ContentBlocks content={props.pageData.content}/>
+				<ContentBlocks content={props.pageData.content} siteData={props.siteData}/>
 			</main>
 		
 			<Footer footer={props.siteData.footer}/>

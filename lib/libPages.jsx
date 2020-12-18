@@ -34,14 +34,14 @@ export function getPages(){
 	return dataForAllPages;
 }
 
-async function giveEachSectionNeeededData(content){
+async function giveEachSectionNeeededData(content,siteData){
 	return await Promise.all(content.map(async (sec)=>{
 		let dataAddedSec={...sec, uuid:uuidv4()};
 		if(dataAddedSec.type==='sections-with-toc'){
-			dataAddedSec.sections=await giveEachSectionNeeededData(dataAddedSec.sections);
+			dataAddedSec.sections=await giveEachSectionNeeededData(dataAddedSec.sections,siteData);
 		}
 		if(dataAddedSec.type==='events'){
-			let swtxlevents= await getSwingLeftEvents('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now');
+			let swtxlevents= await getSwingLeftEvents('',siteData.mobilizeOrgs);
 			let swtxleventsByDay=splitTimeslotsIntoDays(splitEventsIntoTimeSlot(swtxlevents));
 			dataAddedSec={...dataAddedSec, eventData: swtxlevents,eventDataByDay:swtxleventsByDay};
 		}
@@ -66,7 +66,7 @@ export async function getProps(context){
 			}
 		});
 
-	page.content=await giveEachSectionNeeededData(page.content);
+	page.content=await giveEachSectionNeeededData(page.content,siteData);
 	return {
 		props:{
 			siteData:siteData,

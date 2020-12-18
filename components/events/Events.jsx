@@ -17,7 +17,14 @@ import { CSSTransition, SwitchTransition } from 'react-transition-group';
 
 
 export function Events(props){
-	let allEvents=useSWR('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now', getSwingLeftEvents,{initialData:props.eventData,revalidateOnMount:true,errorRetryCount:2});
+	let eventFetcher=(...urlAddKey)=>{
+		let d=getSwingLeftEvents(urlAddKey[0],props.mobilizeOrgs);
+		console.log(urlAddKey);
+		console.log(d);
+		return d;
+	};
+	//uses array as key as '' doesnot trigger fetch
+	let allEvents=useSWR([''], eventFetcher,{initialData:props.eventData,revalidateOnMount:true,errorRetryCount:2});
 	
 	const [isServer,setIsServer]=useState(true);
 	
@@ -91,7 +98,7 @@ export function Events(props){
 		}	
 	}
 
-	let selectedEventsData=useSWR('https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now'+mobilzeUrlAdditions(), getSwingLeftEvents,{initialData:props.eventData,revalidateOnMount:true,errorRetryCount:2});
+	let selectedEventsData=useSWR([mobilzeUrlAdditions()], eventFetcher,{initialData:props.eventData,revalidateOnMount:true,errorRetryCount:2});
 
 
 	//cleanup 
@@ -280,7 +287,7 @@ function EventsCalander(props){
 							return day.month===month&&day.year===year;
 					})} month={month} year={year}/>)
 				:
-					(<button key={displayCal} className={styles.eventQuickCalanderButton} onClick={()=>{setDisplayCal(true)}}>Jump to Day...</button>)
+					(<button key={displayCal} className={styles.eventQuickCalanderButton} onClick={()=>{setDisplayCal(true)}}>Calender</button>)
 				}
 			
 				</CSSTransition>
@@ -407,13 +414,13 @@ function EventsMonth(props){
 									
 									>
 										
-										<a href={'#eventday-'+day.date.getMonth()+'-'+day.date.getDate()+'-'+day.date.getFullYear()}>{day.date.getDate()}</a>
+										<a href={'#eventday-'+day.date.getMonth()+'-'+day.date.getDate()+'-'+day.date.getFullYear()}>{day.date.getDate().toString().padStart(2,'0')}</a>
 									
 									
 									</td>
 								}
 								else{
-									return <td title={day.uuid} key={day.uuid}>{day.date.getDate()}</td>
+									return <td title={day.uuid} key={day.uuid}>{day.date.getDate().toString().padStart(2,'0')}</td>
 								}
 
 								
@@ -483,7 +490,7 @@ export function EventDay(props){
 		observer.observe(dayTitle.current);
 
 		return ()=>{
-			observer.unobserve(dayTitle.current);
+			//observer.unobserve(dayTitle.current);
 			observer.disconnect();
 		}
 	});

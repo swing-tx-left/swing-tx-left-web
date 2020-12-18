@@ -34,11 +34,19 @@ export async function getData(url){
 	return eventArr;
 }
 
-export async function getSwingLeftEvents(queryURL){
-	let theData=await getData(queryURL);
-	//console.log(theData);
-	let swingtxleftEvents=theData.filter(filterOnlySwingTXLeft);
-	return swingtxleftEvents;
+export async function getSwingLeftEvents(urlAdd,mobilizeOrgs){
+	let events=[];
+	for(let morg of mobilizeOrgs){
+			let theData=await getData(morg.url+urlAdd);
+			console.log(theData);
+			let selectedEvents=theData;
+			if(morg.regexp!==undefined&&morg.regexp.length>0){
+				selectedEvents=selectedEvents.filter(filterEventsOnRegExp(morg))
+			}
+			events=events.concat(selectedEvents);
+	}
+
+	return events;
 }
 
 
@@ -107,16 +115,29 @@ export function splitTimeslotsIntoDays(eventTimeSlots,isServer=true){
 		return groupedArr;
 	},[]);
 }
-function filterOnlySwingTXLeft(event,index,arr){
-	let swingtxleftRegExp=/swing\s*tx\s*left/i;
-	let stxlRegExp=/STXL/i;
-	if(event.title.search(swingtxleftRegExp)!==-1||event.title.search(stxlRegExp)!==-1){
-		return true;
+function filterEventsOnRegExp(morg){
+	// let swingtxleftRegExp=/swing\s*tx\s*left/i;
+	// let stxlRegExp=/STXL/i;
+
+	let regexpArr =morg.regexp.map((el)=>{
+		return new RegExp(el.pattern,el.flags);
+	});
+	return (event,index,arr)=>{
+		//maybe a bit ugly?
+		let regexpArrMatch=(str)=>{
+			return regexpArr.some((r)=>{
+				return event.title.search(r)!==-1;
+			});
+		};
+		if(regexpArrMatch(event.title)){
+			return true;
+		}
+		else if(regexpArrMatch(event.description)){
+			return true;
+		}
+		return false;
 	}
-	else if(event.description.search(swingtxleftRegExp)!==-1||event.description.search(stxlRegExp)!==-1){
-		return true;
-	}
-	return false;
+	
 }
 
 export function humanizeEventType(eventType,options={}){

@@ -229,7 +229,7 @@ details[open] .eventAdditionalTimes::before{
 
 .eventQuickMonth td{
 	margin: 0;
-	padding: 0.5rem;
+	padding: 0.7rem;
 	text-align: center;
 	background-color: var(--light-blue);
 	/* border-style: solid;
@@ -250,8 +250,18 @@ details[open] .eventAdditionalTimes::before{
 }
 .eventQuickMonth td a{
 	padding: 0.5rem;
-	
+	border-radius:50%;
+	/* border-radius:0.5rem; */
+	/* border-style:solid;
+	border-width:1px;
+	border-color:var(--site-black); */
+	color:var(--site-black);
+	background-color: var(--logo-blue);
 }
+.eventQuickMonth td:nth-child(2n) a{
+	background-color: var(--logo-pink);
+}
+
 .dayPreview{
 	
 	position: fixed;

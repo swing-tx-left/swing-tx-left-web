@@ -15,7 +15,7 @@ export function ContentBlocks(props) {
 
 
 	
-	return <MkBlocks content={props.content} />;
+	return <MkBlocks content={props.content} siteData={props.siteData}/>;
 }
 
 // function htmlToReact(html){
@@ -40,7 +40,7 @@ export function ContentBlock(props){
 function SectionHeader(props){
 	return <h2>{props.children}</h2>
 }
-function MkBlocks({content}){
+function MkBlocks({content,siteData}){
 	let contentBlockArr = [];
 	//note keys arnt ideal
 	//let index=0;
@@ -56,7 +56,7 @@ function MkBlocks({content}){
 			contentBlockArr.push(
 			
 					
-					<Events key={sec.uuid} secid={(sec.id !== undefined && sec.id !== '') ? sec.id : null} eventData={sec.eventData} eventDataByDay={sec.eventDataByDay}/>
+					<Events key={sec.uuid} secid={(sec.id !== undefined && sec.id !== '') ? sec.id : null} eventData={sec.eventData} eventDataByDay={sec.eventDataByDay} mobilizeOrgs={siteData.mobilizeOrgs}/>
 				)
 		}
 		else if (sec.type === 'sections-with-toc') {
@@ -76,7 +76,7 @@ function MkBlocks({content}){
 
 				</ContentBlock>);
 
-			contentBlockArr.push(<MkBlocks key={sec.uuid} content={sec.sections} />)
+			contentBlockArr.push(<MkBlocks key={sec.uuid} siteData={siteData} content={sec.sections} />)
 		}
 		
 	}
