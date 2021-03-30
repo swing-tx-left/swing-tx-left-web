@@ -31,4 +31,3 @@ mobilizeOrgs:
       - flags: i
         pattern: STXL
     url: https://api.mobilize.us/v1/organizations/210/events?timeslot_end=gte_now
-  - url: https://api.mobilize.us/v1/organizations/2441/events?timeslot_end=gte_now

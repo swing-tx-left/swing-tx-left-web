@@ -3,14 +3,6 @@ slug: home
 mainImage: /files/stxl-main-page-rev-2.jpg
 mainImageFullPage: true
 content:
-  - type: normal-section
-    showHeader: true
-    header: GOTV Georgia
-    content: <p>While we don't have any upcoming events please consider doing some
-      phone banking and texting with <a
-      href="https://www.mobilize.us/fairfight/" target="_blank"
-      rel="noopener">Fair Fight</a> to get out the vote in Georgia.</p>
-    id: gotv_georgia
   - type: events
     header: Events
     id: events
@@ -20,12 +12,8 @@ mainButtons:
     buttons:
       - type: link
         newTab: false
-        link: "#gotv_georgia"
+        link: "#events"
         text: Volunteer!
-      - type: link
-        newTab: true
-        text: GOTV Georgia!
-        link: https://www.mobilize.us/fairfight/
   - alignment: right
     buttons:
       - type: popup
