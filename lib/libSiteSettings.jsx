@@ -3,5 +3,5 @@ import yaml from 'js-yaml'
 import path from 'path'
 
 export function getSiteSettings(){
-	return yaml.safeLoad( fs.readFileSync(path.join(process.cwd(), 'settings.yml'), 'utf-8'));
+	return yaml.load( fs.readFileSync(path.join(process.cwd(), 'settings.yml'), 'utf-8'));
 }

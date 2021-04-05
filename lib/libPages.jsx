@@ -9,7 +9,7 @@ import {v4 as uuidv4} from 'uuid';
 export function getPages(){
 	let pageFiles=fs.readdirSync(path.join(process.cwd(),'pagecontent'));
 	let dataForAllPages =pageFiles.map((file) => {
-		let pageData = yaml.safeLoad( fs.readFileSync(path.join(process.cwd(), 'pagecontent', file), 'utf-8'));
+		let pageData = yaml.load( fs.readFileSync(path.join(process.cwd(), 'pagecontent', file), 'utf-8'));
 		//console.log(pageData)
 		if (pageData.title===undefined) {
 			pageData.title = 'No Title'
