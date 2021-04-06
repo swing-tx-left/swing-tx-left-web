@@ -1,5 +1,7 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: swing-tx-left/swing-tx-left-web
+publish_mode: editorial_workflow
 media_folder: public/files
 public_folder: /files
 collections: 
