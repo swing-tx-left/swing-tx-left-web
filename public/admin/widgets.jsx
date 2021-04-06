@@ -83,7 +83,7 @@ export class SlugUnique extends React.Component {
 	// 	</pre>);
 	render() {
 		//
-
+		
 		console.log(this.props);
 		return (
 			<>
@@ -122,17 +122,55 @@ export class HTMLEditor extends React.Component{
 		this.props.onChange(content);
 	}
 
+	async getLinks(){
+		let useful = JSON.parse(JSON.stringify(this.props))
+		let q = await this.props.query('pagesSearch', useful.entry.collection, ['slug'], '')
+		console.log('searchlinks');
+		console.log(this.props);
+		console.log(q.payload);
+		;
+		return [
+			...q.payload.response.hits.map((el)=>{
+				return {title:el.data.title,value:'/'+el.data.slug}
+			}),
+			{title:'Files',menu:[
+				...this.getFiles()
+			]},
+			
+		]
+	}
+	getFiles(){
+		
+
+		// console.log(await this.props.mediaPaths.get(this.props.config.media_folder));
+		//console.log(this.props.onOpenMediaLibrary());
+		// console.log(this.props.getAsset({path:'/'}));
+		console.log('files');
+		console.log(JSON.parse(JSON.stringify(this.props.entry.get('mediaFiles'))));
+		return JSON.parse(JSON.stringify(this.props.entry.get('mediaFiles'))).map((el)=>{
+				return {title:el.name,value:'/files/'+el.name}
+		});
+		
+	}
+
 	render(){
 		return (
-			
+			<div>
+				<button onClick={()=>{this.props.onOpenMediaLibrary()}}>Show Media</button>
 				<Editor value={this.props.value} init={{
 					height:600,
 					convert_urls:false,
+					link_list:async (success)=>{
+						success(await this.getLinks())
+					},
+					image_list:(success)=>{
+						success(this.getFiles());
+					},
 					plugins:'image anchor table link lists advlists charmap emoticons wordcount fullscreen code' ,
 					toolbar:['undo redo | aligncenter alignjustify alignleft alignnone alignright | bold italic | numlist bullist | indent outdent | removeformat formatselect']
 				}}  outputFormat='html' onEditorChange={this.blah}/>
 
-			
+		</div>	
 		);
 	}
 
