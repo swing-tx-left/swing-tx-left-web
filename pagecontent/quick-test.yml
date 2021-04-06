@@ -1,0 +1,11 @@
+title: quick test
+slug: quick-test
+mainImageFullPage: false
+content:
+  - type: normal-section
+    showHeader: true
+    header: Hello World
+    content: <p><img src="/files/stxl-main-page-rev-2.jpg"
+      alt="stxl-main-page-rev-2.jpg" width="720" height="760" /></p>
+mainButtons: []
+pageMainMessageShow: false
