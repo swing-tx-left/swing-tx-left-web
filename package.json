@@ -9,7 +9,8 @@
     "build": "next build",
     "export": "webpack --config adminpack/webpack.js --mode production && next build && next export",
     "start": "next start",
-    "cms": "npx netlify-cms-proxy-server",
+    "localcms": "node local-cms.js",
+    "cmsproxy": "npx netlify-cms-proxy-server",
     "adminpack": "webpack --watch --config adminpack/webpack.js --mode production"
   },
   "repository": {
