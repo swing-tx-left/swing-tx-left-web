@@ -54,3 +54,9 @@ mainButtons:
         newTab: true
         text: test
         link: test
+  - alignment: right
+    buttons:
+      - type: link
+        newTab: true
+        text: mentor
+        link: google url
